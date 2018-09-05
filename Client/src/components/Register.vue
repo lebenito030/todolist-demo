@@ -44,7 +44,7 @@
     export default {
         name: 'register',
         data: function() {
-            var checkEmail = new RegExp("^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$");
+            var checkEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
             var checkUsername = (rule, value, callback) => {
                 if (!value) {
                     callback(new Error('用户名不能为空'));
@@ -62,7 +62,9 @@
                 }
             };
             var checkPassword2 = (rule, value, callback) => {
-                if(value !== this.register_form.password) {
+                if(!value) {
+                    callback(new Error('密码不能为空'));
+                } else if (value !== this.register_form.password) {
                     callback(new Error('请输入两个相同的密码'));
                 } else {
                     callback();

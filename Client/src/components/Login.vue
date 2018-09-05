@@ -39,7 +39,7 @@
     export default {
         name: 'Login',
         data: function() {
-            var checkEmail = new RegExp("^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$");
+            var checkEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
             var checkUsername = function(rule, value, callback) {
                 if (!value) {
                     callback(new Error('用户名不能为空'));
