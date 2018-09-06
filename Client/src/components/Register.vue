@@ -42,7 +42,7 @@
 
 <script>
     export default {
-        name: 'register',
+        name: 'Register',
         data: function() {
             var checkEmail = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
             var checkUsername = (rule, value, callback) => {
