@@ -14,7 +14,7 @@
                 </el-input>
             </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="submit('login_form')">登录</el-button>
+                <el-button :plain="true" type="primary" @click="submit('login_form')">登录</el-button>
                 <router-link to="/register">
                     <el-button type="info">注册</el-button>
                 </router-link>
@@ -73,11 +73,18 @@
         },
         methods: {
             submit: function(formName) {
+                let submitMessage = this;
                 this.$refs[formName].validate(function(valid) {
                     if (valid) {
                         console.log('submit!');
+                        submitMessage.$message({
+                            message: '登录成功',
+                            type: 'success'
+                        });
+                        submitMessage.$router.push('user');
                     } else {
                         console.log('error submit');
+                        submitMessage.$message.error('登录失败');
                         return false;
                     }
                 });

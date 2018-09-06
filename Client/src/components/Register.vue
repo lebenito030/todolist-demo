@@ -91,11 +91,18 @@
         },
         methods: {
             register: function(formName) {
+                let registerMessage = this;
                 this.$refs[formName].validate(function(valid){
                     if (valid) {
                         console.log("注册成功");
+                        registerMessage.$message({
+                            message: '注册成功',
+                            type: 'success'
+                        });
                     } else {
                         console.log("注册失败");
+                        registerMessage.$message.error('注册失败');
+                        return false;
                     }
                 });
             }
