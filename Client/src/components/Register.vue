@@ -99,6 +99,7 @@
                             message: '注册成功',
                             type: 'success'
                         });
+                        registerMessage.$router.push("/");
                     } else {
                         console.log("注册失败");
                         registerMessage.$message.error('注册失败');
