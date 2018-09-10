@@ -1,26 +1,43 @@
 <template>
     <div id="user">
-        <el-menu mode="horizontal" @select="handleSelect">
-            <el-menu-item index="calendar">
-                <i class="el-icon-date"></i>
-            </el-menu-item>
-            <el-menu-item index="index">Index</el-menu-item>
-            <el-menu-item :index="item.name" v-for="item in userCostomizeBox" :key="item.id">
-                {{ item.name }}
-            </el-menu-item>
-            <el-submenu index="0" id="user-panel">
-                <template slot="title">个人中心</template>
-                <el-menu-item index="0-1" @click="logout">注销</el-menu-item>
-            </el-submenu>
-        </el-menu>
+        <div id="navbar-horizontal">
+            <div id="menu-button">
+                
+            </div>
+        </div>
+        <div id="navbar-vertical">
+            <el-menu class="el-menu-vertical" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
+                <el-menu-item index="1">
+                    <span slot="title">Inbox</span>
+                </el-menu-item>
+                <el-menu-item index="2">
+                    <span slot="title">Today</span>
+                </el-menu-item>
+                <el-submenu index="3">
+                    <template slot="title">
+                        <span slot="title">Personal</span>
+                    </template>
+                    <el-menu-item v-for="item in userCostomizeBox" :key="item.id" :index="item.name">
+                        <span slot="title">{{ item.name }}</span>
+                    </el-menu-item>
+                </el-submenu>
+            </el-menu>
+        </div>
         <router-view></router-view>
     </div>
 </template>
 
 <style scoped>
-#user-panel {
-    float: right;
-}
+    #user {
+        width: 100%;
+    }
+    #navbar-horizontal {
+        height: 60px;
+        background-color: 
+    }
+    .el-menu-vertical {
+        width: 10%;
+    }
 </style>
 
 <script>
