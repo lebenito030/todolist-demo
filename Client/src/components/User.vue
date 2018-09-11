@@ -2,20 +2,20 @@
     <div id="user">
         <el-container id="full-page">
             <el-header id="header">
-                <el-row>
-                    <div id="menu-button" @click="hamburgerMenu">
-                        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
-                            <g>
-                                <path d="M0.5,3.5l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
-                                <path d="M0.5,9.53l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
-                                <path d="M0.5,15.5l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
-                            </g>
-                        </svg>
-                    </div>
-                    <div id="box-name" style="float:left;">
+                <div id="menu-button" @click="hamburgerMenu">
+                    <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
+                        <g>
+                            <path d="M0.5,3.5l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
+                            <path d="M0.5,9.53l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
+                            <path d="M0.5,15.5l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
+                        </g>
+                    </svg>
+                </div>
+                <div id="top-nav">
+                    <div id="main-box-title">
                         {{ $route.params.id }}
                     </div>
-                </el-row>
+                </div>
             </el-header>
             <el-container>
                 <el-menu class="el-menu-vertical" @select="handleSelect" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
@@ -55,17 +55,24 @@
         height: 100%;
     }
     #header {
+        display: flex;
+        align-items: center;
         background-color: #409EFF;
         padding: 0;
     }
     #menu-button {
         width: 64px;
-        text-align: center;
         line-height: 60px;
         background-color: #2f89e4;
     }
+    .menu-button--collapse {
+        width: 280px;
+    }
     #full-page {
         height: 100%;
+    }
+    #main-box-title {
+        margin-left: 20px;
     }
     .el-menu-vertical {
         text-align: left;
@@ -84,6 +91,7 @@
         name: 'User',
         data: function() {
             return {
+                search: '',
                 userCostomizeBox: [
                     {id: 1, name: 'Home'},
                     {id: 2, name: 'Work'}
