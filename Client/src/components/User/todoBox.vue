@@ -1,7 +1,7 @@
 <template>
     <div id="message">
         <span>This' {{ $route.params.id }}</span>
-        <el-row>{{ todoBox.msg }}</el-row>
+        <el-row v-for="item in todoBox" :key="item.id">{{ item.msg }}</el-row>
     </div>
 </template>
 
@@ -14,7 +14,7 @@
         data: function() {
             return {
                 todoBox: [
-                    
+                    {}
                 ]
             }
         }

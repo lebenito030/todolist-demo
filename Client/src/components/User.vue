@@ -2,15 +2,20 @@
     <div id="user">
         <el-container id="full-page">
             <el-header id="header">
-                <div id="menu-button" @click="hamburgerMenu">
-                    <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
-                        <g>
-                            <path d="M0.5,3.5l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
-                            <path d="M0.5,9.53l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
-                            <path d="M0.5,15.5l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
-                        </g>
-                    </svg>
-                </div>
+                <el-row>
+                    <div id="menu-button" @click="hamburgerMenu">
+                        <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
+                            <g>
+                                <path d="M0.5,3.5l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
+                                <path d="M0.5,9.53l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
+                                <path d="M0.5,15.5l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
+                            </g>
+                        </svg>
+                    </div>
+                    <div id="box-name" style="float:left;">
+                        {{ $route.params.id }}
+                    </div>
+                </el-row>
             </el-header>
             <el-container>
                 <el-menu class="el-menu-vertical" @select="handleSelect" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
@@ -57,6 +62,7 @@
         width: 64px;
         text-align: center;
         line-height: 60px;
+        background-color: #2f89e4;
     }
     #full-page {
         height: 100%;
