@@ -2,7 +2,7 @@
     <div id="user">
         <el-container id="full-page">
             <el-header id="header">
-                <div id="menu-button" @click="hamburgerMenu">
+                <div id="menu-button" :class="menuButtonCollapse" @click="hamburgerMenu">
                     <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
                         <g>
                             <path d="M0.5,3.5l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
@@ -65,7 +65,7 @@
         line-height: 60px;
         background-color: #2f89e4;
     }
-    .menu-button--collapse {
+    .menuButtonCollapse {
         width: 280px;
     }
     #full-page {
@@ -96,7 +96,8 @@
                     {id: 1, name: 'Home'},
                     {id: 2, name: 'Work'}
                 ],
-                isCollapse: true
+                isCollapse: true,
+                menuButtonCollapse: true
             };
         },
         methods: {
@@ -112,8 +113,10 @@
             hamburgerMenu: function() {
                 if (this.isCollapse === true) {
                     this.isCollapse = false;
+                    this.menuButtonCollapse = false;
                 } else {
                     this.isCollapse = true;
+                    this.menuButtonCollapse = true;
                 }
             },
             handleOpen: function(key, keyPath) {
