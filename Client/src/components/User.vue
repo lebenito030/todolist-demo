@@ -20,11 +20,11 @@
             </el-header>
             <el-container>
                 <el-menu class="el-menu-vertical" @select="handleSelect" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-                    <el-menu-item index="Inbox">
+                    <el-menu-item index="1">
                         <i class="el-icon-edit-outline"></i>
                         <span slot="title">Inbox</span>
                     </el-menu-item>
-                    <el-menu-item index="Today">
+                    <el-menu-item index="2">
                         <i class="el-icon-date"></i>
                         <span slot="title">Today</span>
                     </el-menu-item>
@@ -33,17 +33,19 @@
                             <i class="el-icon-news"></i>
                             <span slot="title">Personal</span>
                         </template>
-                        <el-menu-item v-for="item in userCostomizeBox" :key="item.id" :index="item.name">
+                        <el-menu-item v-for="item in userCostomizeBox" :key="item.id" :index="'3-' + item.id">
                             <i class="el-icon-document"></i>
                             <span slot="title">{{ item.name }}</span>
+                            <i class="el-icon-edit el-icon-edit-button" @click="editBox( item.id )"></i>
                         </el-menu-item>
                     </el-submenu>
+                    <el-menu-item index="4">
+                        <i class="el-icon-setting"></i>
+                        <span slot="title">Setting</span>
+                    </el-menu-item>
                     <el-menu-item index="0" @click="createNewList">
                         <i class="el-icon-plus"></i>
-                        <span>Create New List</span>
-                    </el-menu-item>
-                    <el-menu-item index="1">
-
+                        <span slot="title">Create New List</span>
                     </el-menu-item>
                 </el-menu>
                 <el-main>
@@ -67,7 +69,6 @@
     #menu-button {
         width: 64px;
         line-height: 60px;
-        background-color: #2f89e4;
         border-right: 1px solid #e6e6e6;
     }
     #full-page {
@@ -83,10 +84,14 @@
     }
     .el-menu-vertical {
         text-align: left;
-        min-height: 100%;
     }
     .el-menu-vertical:not(.el-menu--collapse) {
         width: 279px;
+    }
+    .el-icon-edit-button {
+        position: absolute;
+        text-align: center;
+        top: 30%; right: 20px;
     }
     .edit-button {
         text-align: right;
@@ -99,22 +104,19 @@
         data: function() {
             return {
                 search: '',
+                defaultBox: [
+                    {id: "1", name: "Index"},
+                    {id: "2", name: "Today"},
+                    {id: "4", name: "Setting"}
+                ],
                 userCostomizeBox: [
-                    {id: 1, name: 'Home'},
-                    {id: 2, name: 'Work'}
+                    {id: "1", name: 'Home'},
+                    {id: "2", name: 'Work'}
                 ],
                 isCollapse: true
             };
         },
         methods: {
-            createNewList: function() {
-                this.$prompt('List Name', 'Create New List', {
-                    confirmButtonText: 'Confirm',
-                    cancelButtonText: 'Cancel',
-                }).then(( { value } ) => {
-                    this.userCostomizeBox.push({id: this.userCostomizeBox.length + 1, name: value});
-                })
-            },
             hamburgerMenu: function() {
                 if (this.isCollapse === true) {
                     this.isCollapse = false;
@@ -131,12 +133,31 @@
             handleSelect: function(key, keyPath) {
                 console.log(key, keyPath);
                 if (key !== "0") {
-                    this.$router.push("/user/" + key);
-                }
+                    let defaultUrl = this.defaultBox[parseInt(key)];
+                    this.$router.push("/user/" + defaultUrl.name);
+                } 
             },
             logout: function() {
                 console.log("注销成功");
                 this.$router.push("/");
+            },
+            createNewList: function() {
+                this.$prompt('List Name', 'Create New List', {
+                    confirmButtonText: 'Confirm',
+                    cancelButtonText: 'Cancel'
+                }).then(( { value } ) => {
+                    this.userCostomizeBox.push({id: this.userCostomizeBox.length, name: value});
+                })
+            },
+            editBox: function(editBoxId) {
+                let editName = this.userCostomizeBox[editBoxId - 1].name;
+                this.$prompt('List Name', 'Reset List Name', {
+                    confirmButtonText: 'Confirm',
+                    cancelButtonText: 'Cancel',
+                    inputPlaceholder: editName
+                }).then(( { value } ) => {
+                    this.userCostomizeBox[editBoxId - 1].name = value;
+                })
             }
         }
     }
