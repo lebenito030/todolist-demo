@@ -24,4 +24,9 @@ body {
 html, body, #app {
   height: 100%;
 }
+@media screen and (max-width: 430px) {
+  .message-box-small {
+    width: 320px;
+  }
+}
 </style>

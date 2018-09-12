@@ -1,7 +1,12 @@
 <template>
     <div id="message">
-        <span>This' {{ $route.params.id }}</span>
-        <el-row v-for="item in todoBox" :key="item.id">{{ item.msg }}</el-row>
+        <el-row v-for="(item, index) in todoBox" :key="index">
+            <el-col :span="22">
+                <div id="todoListCard">
+                    
+                </div>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
@@ -14,7 +19,7 @@
         data: function() {
             return {
                 todoBox: [
-                    {}
+                    {isComplete: true, msg: 'First', date: '2018/9/13'}
                 ]
             }
         }

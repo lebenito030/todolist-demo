@@ -2,7 +2,7 @@
     <div id="user">
         <el-container id="full-page">
             <el-header id="header">
-                <div id="menu-button" @click="hamburgerMenu">
+                <div id="menu-button" @click="hamburgerMenu" class="menu-button">
                     <svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve">
                         <g>
                             <path d="M0.5,3.5l19,0" style="fill:none;stroke-width:1px;stroke:#FFFFFF;"></path>
@@ -11,20 +11,25 @@
                         </g>
                     </svg>
                 </div>
-                <div id="top-nav">
-                    <div id="main-box-title">
-                        {{ $route.params.id }}
-                    </div>
-                    <el-button type="text" @click="logout">Logout</el-button>
+                <div id="add-todo-input">
+                    <el-input placeholder="Add a TODO" suffix-icon="el-icon-plus" v-model="addToDoInput"></el-input>
                 </div>
+                <el-dropdown trigger="click" id="menu-more">
+                    <span class="el-dropdown-link">
+                        <i class="el-icon-more el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>Logout</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
             </el-header>
             <el-container>
                 <el-menu class="el-menu-vertical" @select="handleSelect" @open="handleOpen" @close="handleClose" :collapse="isCollapse">
-                    <el-menu-item index="1">
+                    <el-menu-item index="0">
                         <i class="el-icon-edit-outline"></i>
                         <span slot="title">Inbox</span>
                     </el-menu-item>
-                    <el-menu-item index="2">
+                    <el-menu-item index="1">
                         <i class="el-icon-date"></i>
                         <span slot="title">Today</span>
                     </el-menu-item>
@@ -33,17 +38,18 @@
                             <i class="el-icon-news"></i>
                             <span slot="title">Personal</span>
                         </template>
-                        <el-menu-item v-for="item in userCostomizeBox" :key="item.id" :index="'3-' + item.id">
+                        <el-menu-item v-for="(item, index) in userCostomizeBox" :key="index" :index="'3-' + index">
                             <i class="el-icon-document"></i>
                             <span slot="title">{{ item.name }}</span>
-                            <i class="el-icon-edit el-icon-edit-button" @click="editBox( item.id )"></i>
+                            <i class="el-icon-edit el-icon-edit-button" @click="editBox( index )"></i>
+                            <i class="el-icon-delete el-icon-delete-button" @click="deleteBox( index )"></i>
                         </el-menu-item>
                     </el-submenu>
-                    <el-menu-item index="4">
+                    <el-menu-item index="2">
                         <i class="el-icon-setting"></i>
                         <span slot="title">Setting</span>
                     </el-menu-item>
-                    <el-menu-item index="0" @click="createNewList">
+                    <el-menu-item index="5" @click="createNewList">
                         <i class="el-icon-plus"></i>
                         <span slot="title">Create New List</span>
                     </el-menu-item>
@@ -57,6 +63,9 @@
 </template>
 
 <style scoped>
+    .el-message-box {
+        width: 320px;
+    }
     #user {
         height: 100%;
     }
@@ -65,6 +74,7 @@
         align-items: center;
         background-color: #409EFF;
         padding: 0;
+        justify-content: space-between;
     }
     #menu-button {
         width: 64px;
@@ -77,9 +87,11 @@
     #main-box-title {
         margin-left: 20px;
     }
-    #top-nav {
-        display: flex;
-        align-items: center;
+    #add-todo-input {
+        width: 60%;
+    }
+    #menu-more {
+        margin-right: 20px;
         color: #FFFFFF;
     }
     .el-menu-vertical {
@@ -90,8 +102,11 @@
     }
     .el-icon-edit-button {
         position: absolute;
-        text-align: center;
-        top: 30%; right: 20px;
+        top: 34%; right: 10px;
+    }
+    .el-icon-delete-button {
+        position: absolute;
+        top: 34%; right: 50px;
     }
     .edit-button {
         text-align: right;
@@ -105,15 +120,16 @@
             return {
                 search: '',
                 defaultBox: [
-                    {id: "1", name: "Index"},
-                    {id: "2", name: "Today"},
-                    {id: "4", name: "Setting"}
+                    {id: "0", name: "Index"},
+                    {id: "1", name: "Today"},
+                    {id: "2", name: "Setting"}
                 ],
                 userCostomizeBox: [
-                    {id: "1", name: 'Home'},
-                    {id: "2", name: 'Work'}
+                    {name: 'Home'},
+                    {name: 'Work'}
                 ],
-                isCollapse: true
+                isCollapse: true,
+                addToDoInput: ''
             };
         },
         methods: {
@@ -132,10 +148,13 @@
             },
             handleSelect: function(key, keyPath) {
                 console.log(key, keyPath);
-                if (key !== "0") {
-                    let defaultUrl = this.defaultBox[parseInt(key)];
-                    this.$router.push("/user/" + defaultUrl.name);
-                } 
+                let url = this;
+                if (parseInt(key) === 3) {
+                    let trueKey = key[2];
+                    this.$router.push("/user/" + url.userCostomizeBox[trueKey].name);
+                } else if (key !== "5") {
+                    this.$router.push("/user/" + url.defaultBox[parseInt(key)].name);
+                }
             },
             logout: function() {
                 console.log("注销成功");
@@ -144,20 +163,43 @@
             createNewList: function() {
                 this.$prompt('List Name', 'Create New List', {
                     confirmButtonText: 'Confirm',
-                    cancelButtonText: 'Cancel'
+                    cancelButtonText: 'Cancel',
+                    customClass: 'message-box-small'
                 }).then(( { value } ) => {
-                    this.userCostomizeBox.push({id: this.userCostomizeBox.length, name: value});
+                    this.userCostomizeBox.push({ 
+                        name: value
+                    });
                 })
             },
             editBox: function(editBoxId) {
-                let editName = this.userCostomizeBox[editBoxId - 1].name;
+                let editName = this.userCostomizeBox[editBoxId].name;
                 this.$prompt('List Name', 'Reset List Name', {
                     confirmButtonText: 'Confirm',
                     cancelButtonText: 'Cancel',
-                    inputPlaceholder: editName
+                    inputPlaceholder: editName,
+                    customClass: 'message-box-small'
                 }).then(( { value } ) => {
-                    this.userCostomizeBox[editBoxId - 1].name = value;
+                    this.userCostomizeBox[editBoxId].name = value;
                 })
+            },
+            deleteBox: function(deleteBoxId) {
+                this.$confirm('This will permanently delete the list. Continue?', 'Warning', {
+                    confirmButtonText: 'Confirm',
+                    cancelButtonText: 'Cancel',
+                    type: 'warning',
+                    customClass: 'message-box-small'
+                }).then(() => {
+                    this.$message({
+                        type: 'success',
+                        message: 'Delete completed'
+                    });
+                    this.userCostomizeBox.splice(deleteBoxId, 1);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: 'Delete canceled'
+                    });
+                });
             }
         }
     }
