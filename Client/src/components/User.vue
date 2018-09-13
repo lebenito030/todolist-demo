@@ -11,11 +11,7 @@
                         </g>
                     </svg>
                 </div>
-                <div id="add-todo-input">
-                    <el-input placeholder="Add a TODO" v-model="addToDoInput">
-                        <i slot="suffix" class="el-input__icon el-icon-plus el-icon-pointer" @click="addToDo(addToDoInput)"></i>
-                    </el-input>
-                </div>
+                <span>{{ $route.params.id }}</span>
                 <el-dropdown trigger="click" id="menu-more" class="el-icon-pointer">
                     <span class="el-dropdown-link">
                         <i class="el-icon-more el-icon--right"></i>
@@ -47,17 +43,13 @@
                             <i class="el-icon-delete el-icon-delete-button" @click="deleteBox( index )"></i>
                         </el-menu-item>
                     </el-submenu>
-                    <el-menu-item index="2">
-                        <i class="el-icon-setting"></i>
-                        <span slot="title">Setting</span>
-                    </el-menu-item>
                     <el-menu-item index="5" @click="createNewList">
                         <i class="el-icon-plus"></i>
                         <span slot="title">Create New List</span>
                     </el-menu-item>
                 </el-menu>
                 <el-main>
-                    <router-view></router-view>
+                    <router-view/>
                 </el-main>
             </el-container>
         </el-container>
@@ -65,9 +57,6 @@
 </template>
 
 <style scoped>
-    .el-message-box {
-        width: 320px;
-    }
     #user {
         height: 100%;
     }
@@ -89,16 +78,10 @@
     #main-box-title {
         margin-left: 20px;
     }
-    #add-todo-input {
-        width: 60%;
-    }
     #menu-more {
         margin-right: 20px;
         color: #FFFFFF;
         font-size: 24px;
-    }
-    .el-icon-pointer {
-        cursor: pointer;
     }
     .el-menu-vertical {
         text-align: left;
@@ -157,9 +140,9 @@
                 let url = this;
                 if (parseInt(key) === 3) {
                     let trueKey = key[2];
-                    this.$router.push("/user/" + url.userCostomizeBox[trueKey].name);
+                    this.$router.push(url.userCostomizeBox[trueKey].name);
                 } else if (key !== "5") {
-                    this.$router.push("/user/" + url.defaultBox[parseInt(key)].name);
+                    this.$router.push(url.defaultBox[parseInt(key)].name);
                 }
             },
             logout: function() {
@@ -205,15 +188,6 @@
                         type: 'info',
                         message: 'Delete canceled'
                     });
-                });
-            },
-            addToDo: function(item) {
-                console.log(item);
-                this.$router.push({
-                    name: 'todoBox',
-                    params: {
-                        msg: item
-                    }
                 });
             }
         }
