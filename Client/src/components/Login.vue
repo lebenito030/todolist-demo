@@ -81,7 +81,7 @@
                             message: '登录成功',
                             type: 'success'
                         });
-                        submitMessage.$router.push('user');
+                        submitMessage.$router.push('user/index');
                     } else {
                         console.log('error submit');
                         submitMessage.$message.error('登录失败');

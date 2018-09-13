@@ -12,9 +12,11 @@
                     </svg>
                 </div>
                 <div id="add-todo-input">
-                    <el-input placeholder="Add a TODO" suffix-icon="el-icon-plus" v-model="addToDoInput"></el-input>
+                    <el-input placeholder="Add a TODO" v-model="addToDoInput">
+                        <i slot="suffix" class="el-input__icon el-icon-plus el-icon-pointer" @click="addToDo(addToDoInput)"></i>
+                    </el-input>
                 </div>
-                <el-dropdown trigger="click" id="menu-more">
+                <el-dropdown trigger="click" id="menu-more" class="el-icon-pointer">
                     <span class="el-dropdown-link">
                         <i class="el-icon-more el-icon--right"></i>
                     </span>
@@ -93,6 +95,10 @@
     #menu-more {
         margin-right: 20px;
         color: #FFFFFF;
+        font-size: 24px;
+    }
+    .el-icon-pointer {
+        cursor: pointer;
     }
     .el-menu-vertical {
         text-align: left;
@@ -199,6 +205,15 @@
                         type: 'info',
                         message: 'Delete canceled'
                     });
+                });
+            },
+            addToDo: function(item) {
+                console.log(item);
+                this.$router.push({
+                    name: 'todoBox',
+                    params: {
+                        msg: item
+                    }
                 });
             }
         }

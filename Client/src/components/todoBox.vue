@@ -2,7 +2,9 @@
     <div id="message">
         <el-row v-for="(item, index) in todoBox" :key="index">
             <el-col :span="22">
-                
+                <div id="todoListCard">
+                    
+                </div>
             </el-col>
         </el-row>
     </div>
