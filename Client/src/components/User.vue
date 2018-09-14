@@ -83,6 +83,9 @@
         color: #FFFFFF;
         font-size: 24px;
     }
+    .el-icon-pointer {
+        cursor: pointer;
+    }
     .el-menu-vertical {
         text-align: left;
     }
@@ -140,9 +143,9 @@
                 let url = this;
                 if (parseInt(key) === 3) {
                     let trueKey = key[2];
-                    this.$router.push(url.userCostomizeBox[trueKey].name);
+                    this.$router.push('/user/' + url.userCostomizeBox[trueKey].name);
                 } else if (key !== "5") {
-                    this.$router.push(url.defaultBox[parseInt(key)].name);
+                    this.$router.push('/user/' + url.defaultBox[parseInt(key)].name);
                 }
             },
             logout: function() {

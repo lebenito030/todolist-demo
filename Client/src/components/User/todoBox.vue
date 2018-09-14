@@ -2,21 +2,41 @@
     <div id="message">
         <el-row type="flex" justify="center">
             <el-col :span="22">
-                <el-input placeholder="Add a TODO" v-model="addToDoInput">
-                    <i slot="prefix" class="el-input__icon el-icon-plus el-icon-pointer"></i>
+                <el-input placeholder="Add a TODO" v-model="addToDoInput" @keyup.enter.native="addTask(addToDoInput)">
+                    <i slot="prefix" class="el-input__icon el-icon-plus el-icon-pointer" @click="addTask(addToDoInput)"></i>
                 </el-input>
             </el-col>
         </el-row>
-        <el-row>
+        <el-row type="flex" justify="center">
+            <el-col :span="22" class="button-align-left">
+                <button class="show-completed-button" @click="showCompletedLists">SHOW COMPLETED LISTS</button>
+            </el-col>
+        </el-row>
+        <el-row 
+            type="flex" 
+            justify="center" 
+            v-for="(item, index) in todoBox" 
+            v-if="item.isComplete === false"
+            :key="index">
+            <el-col :span="22" class="item-box item-middle">
+                <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
+                <span>{{ item.msg }}</span>
+                <span>{{ item.date }}</span>
+            </el-col>
+        </el-row>
+        <el-row v-if="isShowCompletedLists">
             <hr>
         </el-row>
-        <el-row type="flex" align="middle" justify="center" v-for="(item, index) in todoBox" :key="index">
+        <el-row 
+            type="flex" 
+            justify="center" 
+            v-for="(item, index) in todoBox" 
+            v-if="item.isComplete && isShowCompletedLists"
+            :key="index">
             <el-col :span="22" class="item-box item-middle">
-                <i class="el-icon-circle-check-outline"></i>
-                <div>
-                    <span>{{ item.msg }}</span>
-                    <span>{{ item.date }}</span>
-                </div>
+                <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
+                <span>{{ item.msg }}</span>
+                <span>{{ item.date }}</span>
             </el-col>
         </el-row>
     </div>
@@ -29,9 +49,6 @@
     .el-row:last-child {
         margin-bottom: 0;
     }
-    .el-icon-pointer {
-        cursor: pointer;
-    }
     .item-box {
         padding: 0 10px;
         justify-content: space-between;
@@ -43,17 +60,60 @@
         display: flex;
         align-items: center;
     }
+    .show-completed-button {
+        height: 25px;
+        background-color: transparent;
+        border: 1px solid #dcdfe6;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .button-align-left {
+        text-align: left;
+    }
+    .el-icon-circle {
+        width: 16px; height: 16px;
+        margin-left: 1px;
+        border: 1px solid #000000;
+        border-radius: 10px;
+    }
 </style>
 
 <script>
     export default {
+        name: 'todoBox',
         data: function() {
             return {
                 addToDoInput: '',
                 todoBox: [
                     {isComplete: true, msg: 'First', date: '2018/9/13'},
                     {isComplete: false, msg: 'TWO', date: '2018/9/12'}
-                ]
+                ],
+                isShowCompletedLists: false
+            }
+        },
+        methods: {
+            addTask: function(item) {
+                let date = new Date();
+                this.todoBox.push({
+                    isComplete: false,
+                    msg: item,
+                    date: date.toLocaleDateString()
+                });
+                this.addToDoInput = '';
+            },
+            changeCompleteStatus: function(index) {
+                if(this.todoBox[index].isComplete === true) {
+                    this.todoBox[index].isComplete = false;
+                } else {
+                    this.todoBox[index].isComplete = true;
+                }
+            },
+            showCompletedLists: function() {
+                if(this.isShowCompletedLists === true) {
+                    this.isShowCompletedLists = false;
+                } else {
+                    this.isShowCompletedLists = true;
+                }
             }
         }
     }
