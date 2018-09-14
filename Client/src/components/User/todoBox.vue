@@ -16,12 +16,12 @@
             type="flex" 
             justify="center" 
             v-for="(item, index) in todoBox" 
-            v-if="item.isComplete === false"
+            v-if="item.isComplete === false && item.index === $route.params.id"
             :key="index">
             <el-col :span="22" class="item-box item-middle">
-                <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
-                <span>{{ item.msg }}</span>
-                <span>{{ item.date }}</span>
+                <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
+                <span class="item-message">{{ item.msg }}</span>
+                <span class="item-date">{{ item.date }}</span>
             </el-col>
         </el-row>
         <el-row v-if="isShowCompletedLists">
@@ -31,12 +31,12 @@
             type="flex" 
             justify="center" 
             v-for="(item, index) in todoBox" 
-            v-if="item.isComplete && isShowCompletedLists"
+            v-if="(item.isComplete && isShowCompletedLists) && item.index === $route.params.id"
             :key="index">
             <el-col :span="22" class="item-box item-middle">
-                <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
-                <span>{{ item.msg }}</span>
-                <span>{{ item.date }}</span>
+                <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
+                <span class="item-message task-done">{{ item.msg }}</span>
+                <span class="item-date">{{ item.date }}</span>
             </el-col>
         </el-row>
     </div>
@@ -51,14 +51,23 @@
     }
     .item-box {
         padding: 0 10px;
-        justify-content: space-between;
+        justify-content: flex-start;
         min-height: 40px;
         border-radius: 4px;
         border: 1px solid #dcdfe6;
     }
+    .item-message {
+        font-size: 14px;
+    }
+    .item-date {
+        font-size: 12px;
+    }
     .item-middle {
         display: flex;
         align-items: center;
+    }
+    .task-done {
+        text-decoration: line-through;
     }
     .show-completed-button {
         height: 25px;
@@ -69,6 +78,9 @@
     }
     .button-align-left {
         text-align: left;
+    }
+    .el-icon-pointer {
+        cursor: pointer;
     }
     .el-icon-circle {
         width: 16px; height: 16px;
@@ -85,19 +97,23 @@
             return {
                 addToDoInput: '',
                 todoBox: [
-                    {isComplete: true, msg: 'First', date: '2018/9/13'},
-                    {isComplete: false, msg: 'TWO', date: '2018/9/12'}
+                    {isComplete: true, msg: 'First', date: '2018/9/13',index: 'Inbox'},
+                    {isComplete: false, msg: 'TWO', date: '2018/9/12',index: 'Today'},
+                    {isComplete: false, msg: 'One', date: '2018/9/12',index: 'Home'},
+                    {isComplete: true, msg: 'One', date: '2018/9/12',index: 'Work'}
                 ],
                 isShowCompletedLists: false
             }
         },
         methods: {
             addTask: function(item) {
+                let instance = this;
                 let date = new Date();
                 this.todoBox.push({
                     isComplete: false,
                     msg: item,
-                    date: date.toLocaleDateString()
+                    date: date.toLocaleDateString(),
+                    index: instance.$route.params.id
                 });
                 this.addToDoInput = '';
             },

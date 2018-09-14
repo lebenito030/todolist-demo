@@ -112,7 +112,7 @@
             return {
                 search: '',
                 defaultBox: [
-                    {id: "0", name: "Index"},
+                    {id: "0", name: "Inbox"},
                     {id: "1", name: "Today"},
                     {id: "2", name: "Setting"}
                 ],
