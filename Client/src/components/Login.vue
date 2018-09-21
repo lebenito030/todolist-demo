@@ -76,12 +76,20 @@
                 let submitMessage = this;
                 this.$refs[formName].validate(function(valid) {
                     if (valid) {
-                        console.log('submit!');
-                        submitMessage.$message({
-                            message: '登录成功',
-                            type: 'success'
+                        submitMessage.$axios.post('/api/login', {
+                            email: submitMessage.email,
+                            password: submitMessage.password 
+                        }).then(function(response) {
+                            console.log('submit success');
+                            submitMessage.$message({
+                                message: '登录成功',
+                                type: 'success'
+                            });
+                            submitMessage.$router.push('user/Inbox');
+                        }).catch(function(error) {
+                            console.log('error connect');
+                            submitMessage.$message.error('连接错误');
                         });
-                        submitMessage.$router.push('user/inbox');
                     } else {
                         console.log('error submit');
                         submitMessage.$message.error('登录失败');
