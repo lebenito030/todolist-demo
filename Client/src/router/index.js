@@ -33,4 +33,18 @@ export default new Router({
       ]
     }
   ]
+});
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(res => res.meta.requireAuth)) { //check if needs login
+    if (localStorage.getItem('token')) { //check if logged in
+      next();
+    } else {
+      next({
+        path: '/',
+        query: {redirect: to.fullPath}
+      });
+    }
+  } else {
+    next();
+  }
 })
