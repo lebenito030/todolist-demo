@@ -51,7 +51,7 @@
     }
     .item-box {
         padding: 0 10px;
-        justify-content: flex-start;
+        justify-content: space-between;
         min-height: 40px;
         border-radius: 4px;
         border: 1px solid #dcdfe6;

@@ -11,7 +11,7 @@
                         </g>
                     </svg>
                 </div>
-                <span>{{ $route.params.id }}</span>
+                <span style="color: #FFFFFF;">{{ $route.params.id }}</span>
                 <el-dropdown trigger="click" id="menu-more" class="el-icon-pointer">
                     <span class="el-dropdown-link">
                         <i class="el-icon-more el-icon--right"></i>
