@@ -11,7 +11,7 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/',
+      path: '/login',
       name: 'Login',
       component: Login
     },
@@ -21,9 +21,12 @@ export default new Router({
       component: Register
     },
     {
-      path: '/user',
+      path: '/',
       name: 'User',
       component: User,
+      meta: {
+        required: true
+      },
       children: [
         {
           path: ':id',
@@ -34,17 +37,3 @@ export default new Router({
     }
   ]
 });
-router.beforeEach((to, from, next) => {
-  if (to.matched.some(res => res.meta.requireAuth)) { //check if needs login
-    if (localStorage.getItem('token')) { //check if logged in
-      next();
-    } else {
-      next({
-        path: '/',
-        query: {redirect: to.fullPath}
-      });
-    }
-  } else {
-    next();
-  }
-})

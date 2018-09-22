@@ -19,4 +19,9 @@ new Vue({
   axios,
   components: { App },
   template: '<App/>'
-})
+});
+
+router.beforeEach((to, from, next) => {
+  
+});
+
