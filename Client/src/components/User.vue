@@ -167,7 +167,7 @@
                     this.userCostomizeBox.push({ 
                         name: value
                     });
-                })
+                });
             },
             editBox: function(editBoxId) {
                 let editName = this.userCostomizeBox[editBoxId].name;
@@ -178,7 +178,7 @@
                     customClass: 'message-box-small'
                 }).then(( { value } ) => {
                     this.userCostomizeBox[editBoxId].name = value;
-                })
+                });
             },
             deleteBox: function(deleteBoxId) {
                 this.$confirm('This will permanently delete the list. Continue?', 'Warning', {
