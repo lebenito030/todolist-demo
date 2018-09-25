@@ -9,7 +9,9 @@
         </el-row>
         <el-row type="flex" justify="center">
             <el-col :span="22" class="button-align-left">
-                <button class="show-completed-button" @click="showCompletedLists">SHOW COMPLETED LISTS</button>
+                <button class="show-completed-button" @click="showCompletedLists">
+                    <label>SHOW COMPLETED LISTS</label>
+                </button>
             </el-col>
         </el-row>
         <el-row 
@@ -97,10 +99,10 @@
             return {
                 addToDoInput: '',
                 todoBox: [
-                    {isComplete: true, msg: 'First', date: '2018/9/13',index: 'Inbox'},
-                    {isComplete: false, msg: 'TWO', date: '2018/9/12',index: 'Today'},
-                    {isComplete: false, msg: 'One', date: '2018/9/12',index: 'Home'},
-                    {isComplete: true, msg: 'One', date: '2018/9/12',index: 'Work'}
+                    {isComplete: true, msg: 'First',index: 'Inbox'},
+                    {isComplete: false, msg: 'TWO',index: 'Today'},
+                    {isComplete: false, msg: 'One',index: 'Home'},
+                    {isComplete: true, msg: 'One',index: 'Work'}
                 ],
                 isShowCompletedLists: false
             }
@@ -112,7 +114,6 @@
                 this.todoBox.push({
                     isComplete: false,
                     msg: item,
-                    date: date.toLocaleDateString(),
                     index: instance.$route.params.id
                 });
                 this.addToDoInput = '';

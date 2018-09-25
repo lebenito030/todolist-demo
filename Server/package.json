@@ -9,7 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "koa": "^2.5.2",
+    "koa": "^2.5.3",
     "koa-cors": "0.0.16",
     "koa-router": "^7.4.0"
   }

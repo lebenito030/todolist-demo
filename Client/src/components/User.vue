@@ -86,8 +86,14 @@
     .el-icon-pointer {
         cursor: pointer;
     }
+    .el-main {
+        margin-left: 64px;
+    }
     .el-menu-vertical {
         text-align: left;
+        position: absolute;
+        top: 60px; bottom: 0;
+        z-index: 1;
     }
     .el-menu-vertical:not(.el-menu--collapse) {
         width: 279px;
@@ -143,9 +149,9 @@
                 let url = this;
                 if (parseInt(key) === 3) {
                     let trueKey = key[2];
-                    this.$router.push('/user/' + url.userCostomizeBox[trueKey].name);
+                    this.$router.push(url.userCostomizeBox[trueKey].name);
                 } else if (key !== "5") {
-                    this.$router.push('/user/' + url.defaultBox[parseInt(key)].name);
+                    this.$router.push(url.defaultBox[parseInt(key)].name);
                 }
             },
             logout: function() {

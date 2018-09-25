@@ -15,13 +15,9 @@ Vue.use(ElementUI);
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router,
+  router: router,
   axios,
   components: { App },
   template: '<App/>'
-});
-
-router.beforeEach((to, from, next) => {
-  
 });
 
