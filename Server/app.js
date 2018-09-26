@@ -1,6 +1,5 @@
 const Koa = require('koa');
 const config = require('./config/default');
-const mysql = require('mysql')
 const app = new Koa();
 
 

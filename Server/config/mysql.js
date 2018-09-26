@@ -8,3 +8,13 @@ const pool = mysql.createPool({
     password: config.database.PASSWORD,
     database: config.database.DATABASE
 });
+
+let query = function(sql, values) {
+    return new Promise((resolve, reject) => {
+        pool.getConnection(function(err, rows) {
+            if(err) {
+                resolve(err);
+            }
+        });
+    });
+}
