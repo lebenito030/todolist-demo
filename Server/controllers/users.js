@@ -1,9 +1,9 @@
 const user = require('../models/users');
 
-const getUserInfo = async function (name) {
-    const id = this.params.id;
+const getUserInfo = async function (ctx) {
+    const id = ctx.params.id;
     const result = await user.userData(id);
-    this.body = result;
+    ctx.body = result;
 }
 
 module.exports = {

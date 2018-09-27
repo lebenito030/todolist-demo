@@ -1,5 +1,5 @@
-const config = require('../config/config');
-const mysql = require('mysql')
+const config = require('./config');
+const mysql = require('mysql');
 
 const pool = mysql.createPool({
     host: config.database.HOST,
@@ -57,4 +57,4 @@ createTable(lists);
 
 module.exports = {
     query
-}
+};
