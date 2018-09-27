@@ -3,7 +3,7 @@ const config = {
     database: {
         DATABASE: 'todolist',
         USERNAME: 'root',
-        PASSWORD: '',
+        PASSWORD: 'Yo52$PYfL',
         PORT: '3306',
         HOST: 'localhost'
     }

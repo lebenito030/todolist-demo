@@ -1,7 +1,6 @@
 const Koa = require('koa');
-const config = require('./config/default');
+const config = require('./config/config');
 const app = new Koa();
-
 
 app.use(async ctx => {
     ctx.body = 'Hello World';
@@ -9,4 +8,4 @@ app.use(async ctx => {
 
 app.listen(config.port);
 
-console.log('Done');
+console.log('Koa is done');
