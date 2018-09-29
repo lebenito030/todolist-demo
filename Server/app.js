@@ -1,6 +1,6 @@
 const Koa = require('koa');
 const config = require('./config/config');
-const auth = require('./routes/auth');
+const api = require('./routes/api');
 const jwt = require('koa-jwt');
 const koaRouter = require('koa-router');
 const json = require('koa-json');
@@ -33,7 +33,7 @@ app.on('error', function(err) {
     console.log(err);
 });
 
-router.use('/auth', auth.routes());
+router.use('/api', api.routes());
 
 app.use(router.routes());
 

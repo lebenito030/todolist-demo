@@ -11,7 +11,7 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '/login',
+      path: '/',
       name: 'Login',
       component: Login
     },
@@ -21,7 +21,7 @@ const router = new Router({
       component: Register
     },
     {
-      path: '/',
+      path: '/user',
       name: 'User',
       component: User,
       meta: {
@@ -39,7 +39,15 @@ const router = new Router({
 });
 
 // router.beforeEach((to, from, next) => {
-  
+//   const token = sessionStorage.getItem('token');
+//   if (to.path == '/') {
+//     if (token != 'null' && token != null) {
+//       next('/user/inbox'); //有 token 就跳转到 inbox
+//     }
+//     next();
+//   } else {
+//     next('/'); //回到登录界面
+//   }
 // });
 
 export default router;

@@ -76,24 +76,27 @@
                 let submitMessage = this;
                 this.$refs[formName].validate(function(valid) {
                     if (valid) {
-                        submitMessage.$axios.post('/api/login', {
+                        submitMessage.$axios.post('/api/user', {
                             email: submitMessage.email,
                             password: submitMessage.password 
                         }).then(function(response) {
-                            console.log('submit success');
-                            submitMessage.$message({
-                                message: '登录成功',
-                                type: 'success'
-                            });
-                            submitMessage.$router.push('user/Inbox');
+                            if (response) {
+                                sessionStorage.setItem('token', response.data.token);
+                                submitMessage.$message({
+                                    message: '登录成功',
+                                    type: 'success'
+                                });
+                                submitMessage.$router.push('user/Inbox');
+                            } else {
+                                submitMessage.$message.error(response.data.info);
+                                sessionStorage.setItem('token', null);
+                            }
                         }).catch(function(error) {
-                            console.log('error connect');
                             submitMessage.$message.error('连接错误');
+                            sessionStorage.setItem('token', null);
                         });
                     } else {
-                        console.log('error submit');
                         submitMessage.$message.error('登录失败');
-                        return false;
                     }
                 });
             }

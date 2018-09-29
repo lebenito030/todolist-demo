@@ -1,12 +1,16 @@
 const userModel = require('../config/db');
 
-let userData = function(username) {
+const userData = function(username) {
     let sql = `select * from users where username="${username}"`;
-    userModel.query(sql).then(function(result) {
-        return result;
-    });
+    return userModel.query(sql);
 };
 
+const insertUser = function(registerInfo) {
+    let sql = `insert into users values ("${registerInfo.name}", "${registerInfo.password}")`;
+    return userModel.query(sql);
+}
+
 module.exports = {
-    userData
+    userData: userData,
+    insertUser: insertUser
 }

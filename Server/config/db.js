@@ -18,10 +18,8 @@ let query = function(sql, values) {
                 connection.query(sql, values, (err, rows) => {
                     if(err) {
                         reject(err);
-                        console.log("sql执行失败");
                     } else {
                         resolve(rows);
-                        console.log("sql执行成功");
                     }
                     connection.release();
                 });
@@ -41,7 +39,7 @@ let user =
 let lists =
     `CREATE TABLE IF NOT EXISTS lists(
         id INT NOT NULL AUTO_INCREMENT,
-        resides_user_id INT NOT NULL,
+        resides_user_name CHAR(50) NOT NULL,
         resides_box_name CHAR(50) NOT NULL,
         list_content CHAR(255) NOT NULL,
         list_status TINYINT(1) NOT NULL,
