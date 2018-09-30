@@ -77,10 +77,10 @@
                 this.$refs[formName].validate(function(valid) {
                     if (valid) {
                         submitMessage.$axios.post('/api/user', {
-                            email: submitMessage.email,
-                            password: submitMessage.password 
+                            email: submitMessage.login_form.email,
+                            password: submitMessage.login_form.password 
                         }).then(function(response) {
-                            if (response) {
+                            if (response.data.success) {
                                 sessionStorage.setItem('token', response.data.token);
                                 submitMessage.$message({
                                     message: '登录成功',
@@ -91,7 +91,8 @@
                                 submitMessage.$message.error(response.data.info);
                                 sessionStorage.setItem('token', null);
                             }
-                        }).catch(function(error) {
+                        }).catch(function(response) {
+                            console.log(response);
                             submitMessage.$message.error('连接错误，请稍后重试');
                             sessionStorage.setItem('token', null);
                         });
