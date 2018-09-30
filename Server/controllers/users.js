@@ -10,12 +10,11 @@ const getUserInfo = async function (ctx) {
 }
 
 const postUserAuth = async function (ctx) {
-    console.log('post done');
     const data = ctx.request.body;
+    console.log(data);
     const userInfo = await user.userData(data.email).then(function (result) {
         return result[0];
     });
-
     if(userInfo != null) {
         if(userInfo.password != data.password) {
             ctx.body = {
@@ -41,6 +40,7 @@ const postUserAuth = async function (ctx) {
         }
     }
 }
+
 module.exports = {
     getUserInfo,
     postUserAuth

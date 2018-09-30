@@ -92,11 +92,11 @@
                                 sessionStorage.setItem('token', null);
                             }
                         }).catch(function(error) {
-                            submitMessage.$message.error('连接错误');
+                            submitMessage.$message.error('连接错误，请稍后重试');
                             sessionStorage.setItem('token', null);
                         });
                     } else {
-                        submitMessage.$message.error('登录失败');
+                        submitMessage.$message.error('输入格式错误，请重试');
                     }
                 });
             }

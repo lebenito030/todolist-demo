@@ -12,7 +12,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/api': {
-        target: 'http://127.0.0.1:4443',
+        target: 'https://9ba89c89-8797-4c76-8b38-c1d590cffb96.mock.pstmn.io',
         changeOrigin: true
       }
     },
