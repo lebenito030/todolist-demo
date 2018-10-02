@@ -6,9 +6,9 @@ const userData = function(username) {
 };
 
 const insertUser = function(registerInfo) {
-    let sql = `insert into users values ("${registerInfo.name}", "${registerInfo.password}")`;
+    let sql = `insert into users (username, password) values ("${registerInfo.email}", "${registerInfo.password}")`;
     return userModel.query(sql);
-}
+};
 
 module.exports = {
     userData: userData,

@@ -2,7 +2,7 @@
     <div id="login">
         <img src="../assets/logo.png" alt="Logo" id="logo">
         <p>LOGIN AND TODO IT</p>
-        <el-form ref="login_form" status-icon :model="login_form" :rules="rules">
+        <el-form ref="login_form" @keyup.enter.native="submit('login_form')" status-icon :model="login_form" :rules="rules">
             <el-form-item prop="email">
                 <el-input type="text" placeholder="请输入邮箱" v-model="login_form.email">
                     <template slot="prepend">邮箱</template>
@@ -76,7 +76,7 @@
                 let submitMessage = this;
                 this.$refs[formName].validate(function(valid) {
                     if (valid) {
-                        submitMessage.$axios.post('/api/user', {
+                        submitMessage.$axios.post('/api/login', {
                             email: submitMessage.login_form.email,
                             password: submitMessage.login_form.password 
                         }).then(function(response) {
@@ -92,7 +92,6 @@
                                 sessionStorage.setItem('token', null);
                             }
                         }).catch(function(response) {
-                            console.log(response);
                             submitMessage.$message.error('连接错误，请稍后重试');
                             sessionStorage.setItem('token', null);
                         });

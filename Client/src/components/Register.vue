@@ -94,16 +94,26 @@
                 let registerMessage = this;
                 this.$refs[formName].validate(function(valid){
                     if (valid) {
-                        console.log("注册成功");
-                        registerMessage.$message({
-                            message: '注册成功',
-                            type: 'success'
+                        registerMessage.$axios.post('/api/register', {
+                            email: registerMessage.register_form.email,
+                            password: registerMessage.register_form.password
+                        }).then(function(response) {
+                            if (response.data.success) {
+                                registerMessage.$message({
+                                    message: '注册成功，2 秒后跳转回登录页面',
+                                    type: 'success'
+                                });
+                                setTimeout(function() {
+                                    registerMessage.$router.push('/')
+                                }, 2000);
+                            } else {
+                                registerMessage.$message.error('注册失败，SQL连接错误');
+                            }
+                        }).catch(function(response) {
+                            registerMessage.$message.error('注册失败，服务器连接错误');
                         });
-                        registerMessage.$router.push("/");
                     } else {
-                        console.log("注册失败");
-                        registerMessage.$message.error('注册失败');
-                        return false;
+                        registerMessage.$message.error('注册失败，请检查输入');
                     }
                 });
             }
