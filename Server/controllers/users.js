@@ -18,8 +18,7 @@ const postUserAuth = async function (ctx) {
     if(userInfo != null) {
         if(userInfo.password != data.password) {
             ctx.body = {
-                success: false,
-                info: '密码错误！'
+                success: false //密码错误
             }
         } else {
             const userToken = {
@@ -35,8 +34,7 @@ const postUserAuth = async function (ctx) {
         }
     } else {
         ctx.body = {
-            success: false,
-            info: '用户不存在！'
+            success: false //用户不存在
         }
     }
 }
