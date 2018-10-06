@@ -86,7 +86,7 @@
                                     message: '登录成功',
                                     type: 'success'
                                 });
-                                submitMessage.$router.push('user/Inbox');
+                                submitMessage.$router.push('user/inbox');
                             } else {
                                 submitMessage.$message.error('账号或密码错误');
                                 sessionStorage.setItem('token', null);

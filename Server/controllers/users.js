@@ -1,5 +1,6 @@
 const user = require('../models/users');
-const jwt = require('koa-jwt');
+const jwt = require('jsonwebtoken');
+const koajwt = require('koa-jwt');
 
 const getUserInfo = async function (ctx) {
     const id = ctx.params.id;
@@ -21,11 +22,11 @@ const postUserAuth = async function (ctx) {
             }
         } else {
             const userToken = {
-                name: userInfo.user_name,
+                name: userInfo.username,
                 id: userInfo.id
             };
             const secret = 'todolist-demo';
-            const token = jwt.toString(userToken, secret);
+            const token = jwt.sign(userToken, secret);
             ctx.body = {
                 success: true,
                 token: token

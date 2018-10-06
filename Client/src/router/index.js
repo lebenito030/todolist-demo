@@ -46,11 +46,15 @@ router.beforeEach((to, from, next) => {
   const token = sessionStorage.getItem('token');
   if (to.path == '/' || to.path == '/register') {
     if (token != 'null' && token != null) {
-      // next('/user/inbox'); //有 token 就跳转到 inbox
+      next('/user/inbox'); //有 token 就跳转到 inbox
     }
     next();
   } else {
-    next('/'); //回到登录界面
+    if(token != 'null' && token != null) {
+      next();
+    } else {
+      next('/'); //回到登录界面
+    }
   }
 });
 

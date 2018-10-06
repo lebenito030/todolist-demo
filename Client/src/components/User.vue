@@ -112,22 +112,25 @@
 </style>
 
 <script>
+    import jwt from 'jsonwebtoken';
     export default {
         name: 'User',
         data: function() {
             return {
                 search: '',
                 defaultBox: [
-                    {id: "0", name: "Inbox"},
-                    {id: "1", name: "Today"},
-                    {id: "2", name: "Setting"}
+                    {name: "Inbox"},
+                    {name: "Today"},
+                    {name: "Setting"}
                 ],
                 userCostomizeBox: [
                     {name: 'Home'},
                     {name: 'Work'}
                 ],
                 isCollapse: true,
-                addToDoInput: ''
+                addToDoInput: '',
+                name: '',
+                id: ''
             };
         },
         methods: {
@@ -198,6 +201,26 @@
                         message: 'Delete canceled'
                     });
                 });
+            },
+            getUserInfo: function() {
+                const token = sessionStorage.getItem('token');
+                if (token != 'null' && token != null) {
+                    let decode = jwt.verify(token, 'todolist-demo');
+                    return decode;
+                } else {
+                    return null;
+                }
+            }
+        },
+        created: function() {
+            const userInfo = this.getUserInfo();
+            console.log(userInfo);
+            if (userInfo != null) {
+                this.name = userInfo.name;
+                this.id = userInfo.id;
+            } else {
+                this.name = '',
+                this.id = ''
             }
         }
     }
