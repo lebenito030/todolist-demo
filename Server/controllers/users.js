@@ -1,6 +1,6 @@
 const user = require('../models/users');
 const jwt = require('jsonwebtoken');
-const koajwt = require('koa-jwt');
+const bcrypt = require('bcryptjs');
 
 const getUserInfo = async function (ctx) {
     const id = ctx.params.id;
@@ -16,7 +16,7 @@ const postUserAuth = async function (ctx) {
         return result[0];
     });
     if(userInfo != null) {
-        if(userInfo.password != data.password) {
+        if(!bcrypt.compareSync(data.password, userInfo.password)) {
             ctx.body = {
                 success: false //密码错误
             }
@@ -40,7 +40,11 @@ const postUserAuth = async function (ctx) {
 }
 
 const postUserRegister = async function (ctx) {
-    const data = ctx.request.body;
+    const salt = bcrypt.genSaltSync(10);
+    const data = {
+        email: ctx.request.body.email,
+        password: bcrypt.hashSync(ctx.request.body.password, salt)
+    };
     await user.insertUser(data).then(function(result) {
         if (result.affectedRows > 0) {
             ctx.body = {
