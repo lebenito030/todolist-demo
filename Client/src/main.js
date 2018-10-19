@@ -16,7 +16,7 @@ Vue.use(ElementUI);
 new Vue({
   el: '#app',
   router: router,
-  axios,
+  axios: axios,
   components: { App },
   template: '<App/>'
 });

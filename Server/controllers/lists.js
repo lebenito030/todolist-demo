@@ -1,17 +1,46 @@
-const user = require('../models/users');
+const list = require('../models/lists');
 
-const getListInfo = async function (ctx) {
-    const id = ctx.params.id;
-    const result = await user.listData(id).then(function (result) {
+const getBoxInfo = async function (ctx) {
+    const data = ctx.request.body;
+    const result = await list.customizeBoxInfo(data.username).then(function (result) {
         return result;
     });
-    ctx.body = result;
-}
+    if (result[0] != undefined) {
+        ctx.body = {
+            success: true,
+            result: result
+        };
+    } else {
+        ctx.body = {
+            success: false
+        };
+    }
+};
 
-const createList = async function (ctx) {
-    const 
-}
+const deleteCustomizeBox = async function (ctx) {
+    const data = ctx.request.body;
+    if (data.name == 'Inbox' || data.name == 'Today') {
+        ctx.body = {
+            success: false
+        }
+    } else {
+        const result = await list.deleteCustomizeBox(data.name).then(function (result) {
+            return result;
+        });
+        if (result.affectedRows > 0) {
+            ctx.body = {
+                success: true
+            };
+        } else {
+            ctx.body = {
+                success: false
+            };
+        }
+    }
+};
 
 module.exports = {
-    getListInfo
+    getBoxInfo,
+    deleteCustomizeBox,
+    createCustomizeBox
 }

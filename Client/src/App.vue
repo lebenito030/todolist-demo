@@ -29,4 +29,15 @@ html, body, #app {
     width: 320px;
   }
 }
+@media screen and (max-width: 800px) {
+  .el-menu-vertical {
+    text-align: left;
+    position: absolute;
+    top: 60px; bottom: 0;
+    z-index: 1;
+  }
+  .el-main {
+    margin-left: 64px;
+  }
+}
 </style>

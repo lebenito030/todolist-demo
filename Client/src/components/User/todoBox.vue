@@ -18,7 +18,7 @@
             type="flex" 
             justify="center" 
             v-for="(item, index) in todoBox" 
-            v-if="item.isComplete === false && item.index === $route.params.id"
+            v-if="item.isComplete === 0 && item.index === $route.params.id"
             :key="index">
             <el-col :span="22" class="item-box item-middle">
                 <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
@@ -33,7 +33,7 @@
             type="flex" 
             justify="center" 
             v-for="(item, index) in todoBox" 
-            v-if="(item.isComplete && isShowCompletedLists) && item.index === $route.params.id"
+            v-if="(item.isComplete === 1 && isShowCompletedLists) && item.index === $route.params.id"
             :key="index">
             <el-col :span="22" class="item-box item-middle">
                 <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
@@ -99,10 +99,10 @@
             return {
                 addToDoInput: '',
                 todoBox: [
-                    {isComplete: true, msg: 'First',index: 'Inbox'},
-                    {isComplete: false, msg: 'TWO',index: 'Today'},
-                    {isComplete: false, msg: 'One',index: 'Home'},
-                    {isComplete: true, msg: 'One',index: 'Work'}
+                    {isComplete: 1, msg: 'First',index: 'Inbox'},
+                    {isComplete: 0, msg: 'TWO',index: 'Today'},
+                    {isComplete: 0, msg: 'One',index: 'Home'},
+                    {isComplete: 1, msg: 'One',index: 'Work'}
                 ],
                 isShowCompletedLists: false
             }
@@ -110,19 +110,18 @@
         methods: {
             addTask: function(item) {
                 let instance = this;
-                let date = new Date();
                 this.todoBox.push({
-                    isComplete: false,
+                    isComplete: 0,
                     msg: item,
                     index: instance.$route.params.id
                 });
                 this.addToDoInput = '';
             },
             changeCompleteStatus: function(index) {
-                if(this.todoBox[index].isComplete === true) {
-                    this.todoBox[index].isComplete = false;
+                if(this.todoBox[index].isComplete === 1) {
+                    this.todoBox[index].isComplete = 0;
                 } else {
-                    this.todoBox[index].isComplete = true;
+                    this.todoBox[index].isComplete = 1;
                 }
             },
             showCompletedLists: function() {

@@ -33,7 +33,8 @@ let user =
         id INT NOT NULL AUTO_INCREMENT,
         username CHAR(50) NOT NULL,
         password CHAR(128) NOT NULL,
-        PRIMARY KEY (id)
+        PRIMARY KEY (id),
+        UNIQUE (username)
     )`;
 
 let lists =

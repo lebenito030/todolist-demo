@@ -2,14 +2,6 @@ const user = require('../models/users');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-const getUserInfo = async function (ctx) {
-    const id = ctx.params.id;
-    const result = await user.userData(id).then(function (result) {
-        return result[0];
-    });
-    ctx.body = result;
-}
-
 const postUserAuth = async function (ctx) {
     const data = ctx.request.body;
     const userInfo = await user.userData(data.email).then(function (result) {
@@ -64,7 +56,6 @@ const postUserRegister = async function (ctx) {
 }
 
 module.exports = {
-    getUserInfo,
     postUserAuth,
     postUserRegister
 }

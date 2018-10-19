@@ -36,9 +36,9 @@
                             <i class="el-icon-news"></i>
                             <span slot="title">Personal</span>
                         </template>
-                        <el-menu-item v-for="(item, index) in userCostomizeBox" :key="index" :index="'3-' + index">
+                        <el-menu-item v-if="hasCostomBox" v-for="(item, index) in userCostomizeBox" :key="index" :index="'3-' + index">
                             <i class="el-icon-document"></i>
-                            <span slot="title">{{ item.name }}</span>
+                            <span slot="title">{{ item.resides_box_name }}</span>
                             <i class="el-icon-edit el-icon-edit-button" @click="editBox( index )"></i>
                             <i class="el-icon-delete el-icon-delete-button" @click="deleteBox( index )"></i>
                         </el-menu-item>
@@ -85,14 +85,8 @@
     .el-icon-pointer {
         cursor: pointer;
     }
-    .el-main {
-        margin-left: 64px;
-    }
     .el-menu-vertical {
         text-align: left;
-        position: absolute;
-        top: 60px; bottom: 0;
-        z-index: 1;
     }
     .el-menu-vertical:not(.el-menu--collapse) {
         width: 279px;
@@ -118,18 +112,15 @@
             return {
                 search: '',
                 defaultBox: [
-                    {name: "Inbox"},
-                    {name: "Today"},
-                    {name: "Setting"}
+                    {resides_box_name: "Inbox"},
+                    {resides_box_name: "Today"}
                 ],
-                userCostomizeBox: [
-                    {name: 'Home'},
-                    {name: 'Work'}
-                ],
+                userCostomizeBox: [],
                 isCollapse: true,
                 addToDoInput: '',
                 name: '',
-                id: ''
+                id: '',
+                hasCostomBox: true
             };
         },
         methods: {
@@ -151,9 +142,9 @@
                 let url = this;
                 if (parseInt(key) === 3) {
                     let trueKey = key[2];
-                    this.$router.push(url.userCostomizeBox[trueKey].name);
+                    this.$router.push(url.userCostomizeBox[trueKey].resides_box_name);
                 } else if (key !== "5") {
-                    this.$router.push(url.defaultBox[parseInt(key)].name);
+                    this.$router.push(url.defaultBox[parseInt(key)].resides_box_name);
                 }
             },
             logout: function() {
@@ -166,8 +157,24 @@
                     cancelButtonText: 'Cancel',
                     customClass: 'message-box-small'
                 }).then(( { value } ) => {
-                    this.userCostomizeBox.push({ 
+                    let self = this;
+                    self.$axios.post('/api/createBox', {
                         name: value
+                    }).then(function(response) {
+                        if (response.data.success) {
+                            self.$message({
+                                type: 'info',
+                                message: 'New List Box Has Been Created'
+                            });
+                            self.userCostomizeBox.push({ 
+                                name: value
+                            });
+                        } else {
+                            self.$message({
+                                type: 'error',
+                                message: 'Creat Error'
+                            });
+                        }
                     });
                 });
             },
@@ -189,11 +196,23 @@
                     type: 'warning',
                     customClass: 'message-box-small'
                 }).then(() => {
-                    this.$message({
-                        type: 'success',
-                        message: 'Delete completed'
+                    let self = this;
+                    self.$axios.post('/api/deleteBox', {
+                        name: self.userCostomizeBox[deleteBoxId].resides_box_name
+                    }).then(function(response) {
+                        if (response.data.success) {
+                            self.$message({
+                                type: 'success',
+                                message: 'Delete completed'
+                            });
+                            self.userCostomizeBox.splice(deleteBoxId, 1);
+                        } else {
+                            self.$message({
+                                type: 'info',
+                                message: 'Delete error'
+                            });
+                        }
                     });
-                    this.userCostomizeBox.splice(deleteBoxId, 1);
                 }).catch(() => {
                     this.$message({
                         type: 'info',
@@ -213,7 +232,6 @@
         },
         created: function() {
             const userInfo = this.getUserInfo();
-            console.log(userInfo);
             if (userInfo != null) {
                 this.name = userInfo.name;
                 this.id = userInfo.id;
@@ -221,6 +239,17 @@
                 this.name = '',
                 this.id = ''
             }
+            let self = this;
+            const defaultBoxInfo = self.$axios.post('/api/boxinfo', {
+                username: self.name
+            }).then(function(response) {
+                if (response.data.success) {
+                    self.hasCostomBox = true;
+                    self.userCostomizeBox = response.data.result;
+                } else {
+                    self.hasCostomBox = false;
+                }
+            });
         }
     }
 </script>
