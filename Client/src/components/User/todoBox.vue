@@ -14,33 +14,35 @@
                 </button>
             </el-col>
         </el-row>
-        <el-row 
-            type="flex" 
-            justify="center" 
-            v-for="(item, index) in todoBox" 
-            v-if="item.isComplete === 0 && item.index === $route.params.id"
-            :key="index">
-            <el-col :span="22" class="item-box item-middle">
-                <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
-                <span class="item-message">{{ item.msg }}</span>
-                <span class="item-date">{{ item.date }}</span>
-            </el-col>
-        </el-row>
+        <div v-if="item.isComplete === 0 && item.index === $route.params.id">
+            <el-row 
+                type="flex" 
+                justify="center" 
+                v-for="(item, index) in todoBox" 
+                :key="index">
+                <el-col :span="22" class="item-box item-middle">
+                    <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
+                    <span class="item-message">{{ item.msg }}</span>
+                    <span class="item-date">{{ item.date }}</span>
+                </el-col>
+            </el-row>
+        </div>
         <el-row v-if="isShowCompletedLists">
             <hr>
         </el-row>
-        <el-row 
-            type="flex" 
-            justify="center" 
-            v-for="(item, index) in todoBox" 
-            v-if="(item.isComplete === 1 && isShowCompletedLists) && item.index === $route.params.id"
-            :key="index">
-            <el-col :span="22" class="item-box item-middle">
-                <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
-                <span class="item-message task-done">{{ item.msg }}</span>
-                <span class="item-date">{{ item.date }}</span>
-            </el-col>
-        </el-row>
+        <div v-if="(item.isComplete === 1 && isShowCompletedLists) && item.index === $route.params.id">
+            <el-row 
+                type="flex" 
+                justify="center" 
+                v-for="(item, index) in todoBox" 
+                :key="index">
+                <el-col :span="22" class="item-box item-middle">
+                    <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
+                    <span class="item-message task-done">{{ item.msg }}</span>
+                    <span class="item-date">{{ item.date }}</span>
+                </el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 

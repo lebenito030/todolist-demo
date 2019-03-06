@@ -37,6 +37,14 @@ let user =
         UNIQUE (username)
     )`;
 
+let boxes = 
+    `CREATE TABLE IF NOT EXISTS boxes(
+        id INT NOT NULL AUTO_INCREMENT,
+        resides_user_name CHAR(50) NOT NULL,
+        box_name CHAR(50) NOT NULL,
+        PRIMARY KEY (id)
+    )`;
+
 let lists =
     `CREATE TABLE IF NOT EXISTS lists(
         id INT NOT NULL AUTO_INCREMENT,
@@ -52,6 +60,7 @@ let createTable = function(sql) {
 };
 
 createTable(user);
+createTable(boxes);
 createTable(lists);
 
 module.exports = {

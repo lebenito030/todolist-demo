@@ -31,12 +31,12 @@
                         <i class="el-icon-date"></i>
                         <span slot="title">Today</span>
                     </el-menu-item>
-                    <el-submenu index="3">
+                    <el-submenu index="3" v-if="hasCostomBox">
                         <template slot="title">
                             <i class="el-icon-news"></i>
                             <span slot="title">Personal</span>
                         </template>
-                        <el-menu-item v-if="hasCostomBox" v-for="(item, index) in userCostomizeBox" :key="index" :index="'3-' + index">
+                        <el-menu-item v-for="(item, index) in userCostomizeBox" :key="index" :index="'3-' + index">
                             <i class="el-icon-document"></i>
                             <span slot="title">{{ item.resides_box_name }}</span>
                             <i class="el-icon-edit el-icon-edit-button" @click="editBox( index )"></i>

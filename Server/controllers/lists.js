@@ -42,5 +42,5 @@ const deleteCustomizeBox = async function (ctx) {
 module.exports = {
     getBoxInfo,
     deleteCustomizeBox,
-    createCustomizeBox
+    // createCustomizeBox
 }

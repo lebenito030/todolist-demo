@@ -16,12 +16,12 @@ const deleteCustomizeBox = function(box_name) {
 };
 
 const createCustomizeBox = function(box_name) {
-    let sql = ``
+    // let sql = ``
 }
 
 module.exports = {
     listData,
     customizeBoxInfo,
-    deleteCustomizeBox,
-    createCustomizeBox
+    deleteCustomizeBox
+    // createCustomizeBox
 }
