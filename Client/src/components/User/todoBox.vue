@@ -14,35 +14,33 @@
                 </button>
             </el-col>
         </el-row>
-        <div v-if="item.isComplete === 0 && item.index === $route.params.id">
-            <el-row 
-                type="flex" 
-                justify="center" 
-                v-for="(item, index) in todoBox" 
-                :key="index">
-                <el-col :span="22" class="item-box item-middle">
-                    <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
-                    <span class="item-message">{{ item.msg }}</span>
-                    <span class="item-date">{{ item.date }}</span>
-                </el-col>
-            </el-row>
-        </div>
+        <el-row 
+            type="flex" 
+            justify="center" 
+            v-for="(item, index) in todoBox" 
+            v-if="item.isComplete === false && item.index === $route.params.id"
+            :key="index + 1">
+            <el-col :span="22" class="item-box item-middle">
+                <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
+                <span class="item-message">{{ item.msg }}</span>
+                <span class="item-date">{{ item.date }}</span>
+            </el-col>
+        </el-row>
         <el-row v-if="isShowCompletedLists">
             <hr>
         </el-row>
-        <div v-if="(item.isComplete === 1 && isShowCompletedLists) && item.index === $route.params.id">
-            <el-row 
-                type="flex" 
-                justify="center" 
-                v-for="(item, index) in todoBox" 
-                :key="index">
-                <el-col :span="22" class="item-box item-middle">
-                    <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
-                    <span class="item-message task-done">{{ item.msg }}</span>
-                    <span class="item-date">{{ item.date }}</span>
-                </el-col>
-            </el-row>
-        </div>
+        <el-row 
+            type="flex" 
+            justify="center" 
+            v-for="(item, index) in todoBox" 
+            v-if="(item.isComplete === true && isShowCompletedLists) && item.index === $route.params.id"
+            :key="index + 1">
+            <el-col :span="22" class="item-box item-middle">
+                <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
+                <span class="item-message task-done">{{ item.msg }}</span>
+                <span class="item-date">{{ item.date }}</span>
+            </el-col>
+        </el-row>
     </div>
 </template>
 
@@ -101,10 +99,11 @@
             return {
                 addToDoInput: '',
                 todoBox: [
-                    {isComplete: 1, msg: 'First',index: 'Inbox'},
-                    {isComplete: 0, msg: 'TWO',index: 'Today'},
-                    {isComplete: 0, msg: 'One',index: 'Home'},
-                    {isComplete: 1, msg: 'One',index: 'Work'}
+                    {isComplete: true, msg: 'First',index: 'Inbox'},
+                    {isComplete: true, msg: 'First',index: 'Inbox'},
+                    {isComplete: false, msg: 'TWO',index: 'Today'},
+                    {isComplete: false, msg: 'One',index: 'Home'},
+                    {isComplete: true, msg: 'One',index: 'Work'}
                 ],
                 isShowCompletedLists: false
             }
@@ -113,17 +112,17 @@
             addTask: function(item) {
                 let instance = this;
                 this.todoBox.push({
-                    isComplete: 0,
+                    isComplete: false,
                     msg: item,
                     index: instance.$route.params.id
                 });
                 this.addToDoInput = '';
             },
             changeCompleteStatus: function(index) {
-                if(this.todoBox[index].isComplete === 1) {
-                    this.todoBox[index].isComplete = 0;
+                if(this.todoBox[index].isComplete === true) {
+                    this.todoBox[index].isComplete = false;
                 } else {
-                    this.todoBox[index].isComplete = 1;
+                    this.todoBox[index].isComplete = true;
                 }
             },
             showCompletedLists: function() {

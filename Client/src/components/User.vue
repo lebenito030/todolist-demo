@@ -17,7 +17,9 @@
                         {{ name }}<i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item>Logout</el-dropdown-item>
+                        <el-dropdown-item>
+                            <span @click="logout">Logout</span>
+                        </el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
             </el-header>
@@ -148,7 +150,8 @@
                 }
             },
             logout: function() {
-                console.log("注销成功");
+                console.log('退出');
+                localStorage.removeItem('token');
                 this.$router.push("/");
             },
             createNewList: function() {
@@ -221,7 +224,7 @@
                 });
             },
             getUserInfo: function() {
-                const token = sessionStorage.getItem('token');
+                const token = localStorage.getItem('token');
                 if (token != 'null' && token != null) {
                     let decode = jwt.verify(token, 'todolist-demo');
                     return decode;

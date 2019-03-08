@@ -81,7 +81,7 @@
                             password: submitMessage.login_form.password 
                         }).then(function(response) {
                             if (response.data.success) {
-                                sessionStorage.setItem('token', response.data.token);
+                                localStorage.setItem('token', response.data.token);
                                 submitMessage.$message({
                                     message: '登录成功',
                                     type: 'success'
@@ -89,11 +89,11 @@
                                 submitMessage.$router.push('user/Inbox');
                             } else {
                                 submitMessage.$message.error('账号或密码错误');
-                                sessionStorage.setItem('token', null);
+                                localStorage.setItem('token', null);
                             }
                         }).catch(function(response) {
                             submitMessage.$message.error('连接错误，请稍后重试');
-                            sessionStorage.setItem('token', null);
+                            localStorage.setItem('token', null);
                         });
                     } else {
                         submitMessage.$message.error('输入格式错误，请重试');
