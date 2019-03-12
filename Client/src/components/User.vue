@@ -18,7 +18,7 @@
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item>
-                            <span @click="logout">Logout</span>
+                            <span @click="logout">注销</span>
                         </el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown>
@@ -36,18 +36,16 @@
                     <el-submenu index="3" v-if="hasCostomBox">
                         <template slot="title">
                             <i class="el-icon-news"></i>
-                            <span slot="title">Personal</span>
+                            <span slot="title">自定义标签</span>
                         </template>
                         <el-menu-item v-for="(item, index) in userCostomizeBox" :key="index" :index="'3-' + index">
-                            <i class="el-icon-document"></i>
-                            <span slot="title">{{ item.resides_box_name }}</span>
-                            <i class="el-icon-edit el-icon-edit-button" @click="editBox( index )"></i>
+                            <span slot="title">{{ item.box_name }}</span>
                             <i class="el-icon-delete el-icon-delete-button" @click="deleteBox( index )"></i>
                         </el-menu-item>
                     </el-submenu>
                     <el-menu-item index="5" @click="createNewList">
                         <i class="el-icon-plus"></i>
-                        <span slot="title">Create New List</span>
+                        <span slot="title">创建新标签</span>
                     </el-menu-item>
                 </el-menu>
                 <el-main>
@@ -93,16 +91,12 @@
     .el-menu-vertical:not(.el-menu--collapse) {
         width: 279px;
     }
-    .el-icon-edit-button {
+    .el-icon-delete-button {
         position: absolute;
         top: 34%; right: 10px;
     }
-    .el-icon-delete-button {
-        position: absolute;
-        top: 34%; right: 50px;
-    }
-    .edit-button {
-        text-align: right;
+    .el-icon-delete {
+        visibility: hidden;
     }
 </style>
 
@@ -144,7 +138,8 @@
                 let url = this;
                 if (parseInt(key) === 3) {
                     let trueKey = key[2];
-                    this.$router.push(url.userCostomizeBox[trueKey].resides_box_name);
+                    console.log(trueKey, url);
+                    this.$router.push(url.userCostomizeBox[trueKey].box_name);
                 } else if (key !== "5") {
                     this.$router.push(url.defaultBox[parseInt(key)].resides_box_name);
                 }
@@ -155,71 +150,56 @@
                 this.$router.push("/");
             },
             createNewList: function() {
-                this.$prompt('List Name', 'Create New List', {
-                    confirmButtonText: 'Confirm',
-                    cancelButtonText: 'Cancel',
+                this.$prompt('标签名', '创建新标签', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
                     customClass: 'message-box-small'
                 }).then(( { value } ) => {
                     let self = this;
+                    const user = self.getUserInfo();
                     self.$axios.post('/api/createBox', {
+                        user: user.name,
                         name: value
                     }).then(function(response) {
                         if (response.data.success) {
                             self.$message({
                                 type: 'info',
-                                message: 'New List Box Has Been Created'
-                            });
-                            self.userCostomizeBox.push({ 
-                                name: value
+                                message: '新标签栏创建成功'
                             });
                         } else {
                             self.$message({
                                 type: 'error',
-                                message: 'Creat Error'
+                                message: '新标签栏创建失败'
                             });
                         }
                     });
                 });
             },
-            editBox: function(editBoxId) {
-                let editName = this.userCostomizeBox[editBoxId].name;
-                this.$prompt('List Name', 'Reset List Name', {
-                    confirmButtonText: 'Confirm',
-                    cancelButtonText: 'Cancel',
-                    inputPlaceholder: editName,
-                    customClass: 'message-box-small'
-                }).then(( { value } ) => {
-                    this.userCostomizeBox[editBoxId].name = value;
-                });
-            },
             deleteBox: function(deleteBoxId) {
-                this.$confirm('This will permanently delete the list. Continue?', 'Warning', {
-                    confirmButtonText: 'Confirm',
-                    cancelButtonText: 'Cancel',
+                this.$confirm('这会永久删除标签以及其中的所有内容，你确定吗？', 'Warning', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
                     type: 'warning',
                     customClass: 'message-box-small'
                 }).then(() => {
                     let self = this;
+                    const user = self.getUserInfo();
                     self.$axios.post('/api/deleteBox', {
+                        user: user.name,
                         name: self.userCostomizeBox[deleteBoxId].resides_box_name
                     }).then(function(response) {
                         if (response.data.success) {
                             self.$message({
                                 type: 'success',
-                                message: 'Delete completed'
+                                message: '标签已删除'
                             });
                             self.userCostomizeBox.splice(deleteBoxId, 1);
                         } else {
                             self.$message({
                                 type: 'info',
-                                message: 'Delete error'
+                                message: '删除失败，请重试'
                             });
                         }
-                    });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: 'Delete canceled'
                     });
                 });
             },

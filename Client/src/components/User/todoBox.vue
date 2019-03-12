@@ -10,7 +10,7 @@
         <el-row type="flex" justify="center">
             <el-col :span="22" class="button-align-left">
                 <button class="show-completed-button" @click="showCompletedLists">
-                    <label>SHOW COMPLETED LISTS</label>
+                    <label>显示已完成内容</label>
                 </button>
             </el-col>
         </el-row>
