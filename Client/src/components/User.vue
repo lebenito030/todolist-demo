@@ -95,9 +95,6 @@
         position: absolute;
         top: 34%; right: 10px;
     }
-    .el-icon-delete {
-        visibility: hidden;
-    }
 </style>
 
 <script>
@@ -162,6 +159,16 @@
                         name: value
                     }).then(function(response) {
                         if (response.data.success) {
+                            const defaultBoxInfo = self.$axios.post('/api/boxinfo', {
+                                username: self.name
+                            }).then(function(response) {
+                                if (response.data.success) {
+                                    self.hasCostomBox = true;
+                                    self.userCostomizeBox = response.data.result;
+                                } else {
+                                    self.hasCostomBox = false;
+                                }
+                            });
                             self.$message({
                                 type: 'info',
                                 message: '新标签栏创建成功'
@@ -186,14 +193,24 @@
                     const user = self.getUserInfo();
                     self.$axios.post('/api/deleteBox', {
                         user: user.name,
-                        name: self.userCostomizeBox[deleteBoxId].resides_box_name
+                        name: self.userCostomizeBox[deleteBoxId].box_name
                     }).then(function(response) {
                         if (response.data.success) {
+                            const defaultBoxInfo = self.$axios.post('/api/boxinfo', {
+                                username: self.name
+                            }).then(function(response) {
+                                if (response.data.success) {
+                                    self.hasCostomBox = true;
+                                    self.userCostomizeBox = response.data.result;
+                                } else {
+                                    self.hasCostomBox = false;
+                                }
+                            });
+                            self.$router.push('/user');
                             self.$message({
                                 type: 'success',
                                 message: '标签已删除'
                             });
-                            self.userCostomizeBox.splice(deleteBoxId, 1);
                         } else {
                             self.$message({
                                 type: 'info',

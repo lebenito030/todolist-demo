@@ -4,7 +4,6 @@ const getBoxInfo = async function (ctx) {
     console.log(ctx.request.body);
     const data = ctx.request.body;
     const result = await list.customizeBoxInfo(data.username).then(function (result) {
-        console.log(result);
         return result;
     });
     if (result[0] != undefined) {
@@ -27,6 +26,7 @@ const deleteCustomizeBox = async function (ctx) {
         }
     } else {
         const result = await list.deleteCustomizeBox(data.user, data.name).then(function (result) {
+            console.log(result);
             return result;
         });
         if (result.affectedRows > 0) {
@@ -42,7 +42,6 @@ const deleteCustomizeBox = async function (ctx) {
 };
 
 const createCustomizeBox = async function (ctx) {
-    console.log(ctx.request.body);
     const data = ctx.request.body;
     if (data.name == 'Inbox' || data.name == 'Today') {
         ctx.body = {

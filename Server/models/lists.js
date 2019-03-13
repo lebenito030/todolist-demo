@@ -11,7 +11,7 @@ const customizeBoxInfo = function(username) {
 };
 
 const deleteCustomizeBox = function(username, box_name) {
-    let sql = `delete from lists where (resides_box_name ="${box_name}" and resides_user_name="${username}")`;
+    let sql = `delete boxes, lists from boxes left join lists on ((boxes.resides_user_name = lists.resides_user_name) and (boxes.box_name = lists.resides_box_name)) where (boxes.box_name = '${box_name}' and boxes.resides_user_name = '${username}')`;
     return userModel.query(sql);
 };
 
