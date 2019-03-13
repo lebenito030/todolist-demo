@@ -38,10 +38,10 @@
                             <i class="el-icon-news"></i>
                             <span slot="title">自定义标签</span>
                         </template>
-                        <el-menu-item v-for="(item, index) in userCostomizeBox" :key="index" :index="'3-' + index">
-                            <div @mouseenter="showDeleteButton(index)" @mouseleave="hiddenDeleteButton(index)">
+                        <el-menu-item style="padding: 0;" v-for="(item, index) in userCostomizeBox" :key="index" :index="'3-' + index">
+                            <div style="text-align: center;" @mouseenter="showDeleteButton(index)" @mouseleave="hiddenDeleteButton(index)">
                                 <span slot="title">{{ item.box_name }}</span>
-                                <i class="el-icon-delete el-icon-delete-button" @click="deleteBox(index)"></i>
+                                <i class="el-icon-delete el-icon-delete-button" @mouseenter="deleteButtonColorRed(index)" @mouseleave="deleteButtonColorReset(index)" @click="deleteBox(index)"></i>
                             </div>
                         </el-menu-item>
                     </el-submenu>
@@ -120,6 +120,14 @@
             };
         },
         methods: {
+            deleteButtonColorRed: function(index) {
+                const lists = document.querySelectorAll('ul[role=menu] > li');
+                lists[index].querySelector('i').style.color = 'red';
+            },
+            deleteButtonColorReset: function(index) {
+                const lists = document.querySelectorAll('ul[role=menu] > li');
+                lists[index].querySelector('i').style.color = '';
+            },
             showDeleteButton: function(index) {
                 const lists = document.querySelectorAll('ul[role=menu] > li');
                 lists[index].querySelector('i').style.visibility = 'visible';
