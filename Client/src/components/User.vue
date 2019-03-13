@@ -39,8 +39,10 @@
                             <span slot="title">自定义标签</span>
                         </template>
                         <el-menu-item v-for="(item, index) in userCostomizeBox" :key="index" :index="'3-' + index">
-                            <span slot="title">{{ item.box_name }}</span>
-                            <i class="el-icon-delete el-icon-delete-button" @click="deleteBox( index )"></i>
+                            <div @mouseenter="showDeleteButton(index)" @mouseleave="hiddenDeleteButton(index)">
+                                <span slot="title">{{ item.box_name }}</span>
+                                <i class="el-icon-delete el-icon-delete-button" @click="deleteBox(index)"></i>
+                            </div>
                         </el-menu-item>
                     </el-submenu>
                     <el-menu-item index="5" @click="createNewList">
@@ -94,6 +96,7 @@
     .el-icon-delete-button {
         position: absolute;
         top: 34%; right: 10px;
+        visibility: hidden;
     }
 </style>
 
@@ -117,6 +120,14 @@
             };
         },
         methods: {
+            showDeleteButton: function(index) {
+                const lists = document.querySelectorAll('ul[role=menu] > li');
+                lists[index].querySelector('i').style.visibility = 'visible';
+            },
+            hiddenDeleteButton: function(index) {
+                const lists = document.querySelectorAll('ul[role=menu] > li');
+                lists[index].querySelector('i').style.visibility = 'hidden';
+            },
             hamburgerMenu: function() {
                 if (this.isCollapse === true) {
                     this.isCollapse = false;
