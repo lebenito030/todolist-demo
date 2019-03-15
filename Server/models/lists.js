@@ -1,7 +1,7 @@
 const userModel = require('../config/db');
 
-const listData = function(username, box_name) {
-    let sql = `select * from lists where resides_box_name="${box_name}" AND resides_user_name="${username}"`;
+const listInfo = function(username) {
+    let sql = `select * from lists where resides_user_name="${username}"`;
     return userModel.query(sql);
 };
 
@@ -21,7 +21,7 @@ const createCustomizeBox = function(username, box_name) {
 }
 
 module.exports = {
-    listData,
+    listInfo,
     customizeBoxInfo,
     deleteCustomizeBox,
     createCustomizeBox

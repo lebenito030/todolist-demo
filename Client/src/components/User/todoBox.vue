@@ -2,7 +2,7 @@
     <div id="message">
         <el-row type="flex" justify="center">
             <el-col :span="22">
-                <el-input placeholder="Add a TODO" v-model="addToDoInput" @keyup.enter.native="addTask(addToDoInput)">
+                <el-input placeholder="添加任务事项" v-model="addToDoInput" @keyup.enter.native="addTask(addToDoInput)">
                     <i slot="prefix" class="el-input__icon el-icon-plus el-icon-pointer" @click="addTask(addToDoInput)"></i>
                 </el-input>
             </el-col>
@@ -18,11 +18,11 @@
             type="flex" 
             justify="center" 
             v-for="(item, index) in todoBox" 
-            v-if="item.isComplete === false && item.index === $route.params.id"
+            v-if="item.list_status === 0 && item.resides_box_name === $route.params.id"
             :key="index + 1">
             <el-col :span="22" class="item-box item-middle">
                 <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
-                <span class="item-message">{{ item.msg }}</span>
+                <span class="item-message">{{ item.list_content }}</span>
                 <span class="item-date">{{ item.date }}</span>
             </el-col>
         </el-row>
@@ -33,11 +33,11 @@
             type="flex" 
             justify="center" 
             v-for="(item, index) in todoBox" 
-            v-if="(item.isComplete === true && isShowCompletedLists) && item.index === $route.params.id"
+            v-if="(item.list_status === 1 && isShowCompletedLists) && item.resides_box_name === $route.params.id"
             :key="index + 1">
             <el-col :span="22" class="item-box item-middle">
                 <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
-                <span class="item-message task-done">{{ item.msg }}</span>
+                <span class="item-message task-done">{{ item.list_content }}</span>
                 <span class="item-date">{{ item.date }}</span>
             </el-col>
         </el-row>
@@ -93,45 +93,67 @@
 </style>
 
 <script>
+    import jwt from 'jsonwebtoken';
     export default {
         name: 'todoBox',
         data: function() {
             return {
+                name: '',
                 addToDoInput: '',
                 todoBox: [
-                    {isComplete: true, msg: 'First',index: 'Inbox'},
-                    {isComplete: true, msg: 'First',index: 'Inbox'},
-                    {isComplete: false, msg: 'TWO',index: 'Today'},
-                    {isComplete: false, msg: 'One',index: 'Home'},
-                    {isComplete: true, msg: 'One',index: 'Work'}
+                    
                 ],
-                isShowCompletedLists: false
+                isShowCompletedLists: 0
             }
         },
         methods: {
+            getUserInfo: function() {
+                const token = localStorage.getItem('token');
+                if (token != 'null' && token != null) {
+                    let decode = jwt.verify(token, 'todolist-demo');
+                    return decode;
+                } else {
+                    return null;
+                }
+            },
             addTask: function(item) {
                 let instance = this;
                 this.todoBox.push({
-                    isComplete: false,
-                    msg: item,
-                    index: instance.$route.params.id
+                    list_status: 0,
+                    list_content: item,
+                    resides_box_name: instance.$route.params.id
                 });
                 this.addToDoInput = '';
             },
             changeCompleteStatus: function(index) {
-                if(this.todoBox[index].isComplete === true) {
-                    this.todoBox[index].isComplete = false;
+                if(this.todoBox[index].list_status === 1) {
+                    this.todoBox[index].list_status = 0;
                 } else {
-                    this.todoBox[index].isComplete = true;
+                    this.todoBox[index].list_status = 1;
                 }
             },
             showCompletedLists: function() {
-                if(this.isShowCompletedLists === true) {
-                    this.isShowCompletedLists = false;
+                if(this.isShowCompletedLists === 1) {
+                    this.isShowCompletedLists = 0;
                 } else {
-                    this.isShowCompletedLists = true;
+                    this.isShowCompletedLists = 1;
                 }
             }
-        }
+        },
+        created() {
+            const userInfo = this.getUserInfo();
+            if (userInfo != null) {
+                this.name = userInfo.name
+            } else {
+                this.name = ''
+            }
+            let self = this;
+            const listInfo = self.$axios.post('/api/listinfo', {
+                username: self.name
+            }).then(function(response) {
+                const data = response.data.result;
+                self.todoBox = data;
+            });
+        },
     }
 </script>

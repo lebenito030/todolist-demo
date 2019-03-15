@@ -51,7 +51,7 @@
                     </el-menu-item>
                 </el-menu>
                 <el-main>
-                    <router-view/>
+                    <router-view :message="name"/>
                 </el-main>
             </el-container>
         </el-container>

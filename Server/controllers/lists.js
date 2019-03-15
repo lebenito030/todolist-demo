@@ -1,7 +1,6 @@
 const list = require('../models/lists');
 
 const getBoxInfo = async function (ctx) {
-    console.log(ctx.request.body);
     const data = ctx.request.body;
     const result = await list.customizeBoxInfo(data.username).then(function (result) {
         return result;
@@ -63,8 +62,26 @@ const createCustomizeBox = async function (ctx) {
     }
 };
 
+const getListInfo = async function (ctx) {
+    const data = ctx.request.body;
+    const result = await list.listInfo(data.username).then(function (result) {
+        return result;
+    });
+    if (result[0] != undefined) {
+        ctx.body = {
+            success: true,
+            result: result
+        };
+    } else {
+        ctx.body = {
+            success: false
+        };
+    }
+};
+
 module.exports = {
     getBoxInfo,
     deleteCustomizeBox,
-    createCustomizeBox
+    createCustomizeBox,
+    getListInfo
 }
