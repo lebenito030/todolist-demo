@@ -79,9 +79,26 @@ const getListInfo = async function (ctx) {
     }
 };
 
+const addList = async function (ctx) {
+    const data = ctx.request.body;
+    const result = await list.addList(data).then(function (result) {
+        return result;
+    });
+    if (result.affectedRows > 0) {
+        ctx.body = {
+            success: true
+        };
+    } else {
+        ctx.body = {
+            success: false
+        };
+    }
+}
+
 module.exports = {
     getBoxInfo,
     deleteCustomizeBox,
     createCustomizeBox,
-    getListInfo
+    getListInfo,
+    addList
 }

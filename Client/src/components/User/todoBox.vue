@@ -98,7 +98,7 @@
         name: 'todoBox',
         data: function() {
             return {
-                name: '',
+                username: '',
                 addToDoInput: '',
                 todoBox: [
                     
@@ -123,6 +123,26 @@
                     list_content: item,
                     resides_box_name: instance.$route.params.id
                 });
+                const addList = instance.$axios.post('/api/addlist', {
+                    resides_box_name: instance.$route.params.id,
+                    list_content: item,
+                    list_status: 0,
+                    username: instance.username
+                }).then(function(response) {
+                    if (response.data.success) {
+                        const listInfo = instance.$axios.post('/api/listinfo', {
+                            username: instance.username
+                        }).then(function(response) {
+                            const data = response.data.result;
+                            instance.todoBox = data;
+                        });
+                    } else {
+                        instance.$message({
+                            type: 'error',
+                            message: '与服务器连接失败'
+                        });
+                    }
+                })
                 this.addToDoInput = '';
             },
             changeCompleteStatus: function(index) {
@@ -143,13 +163,13 @@
         created() {
             const userInfo = this.getUserInfo();
             if (userInfo != null) {
-                this.name = userInfo.name
+                this.username = userInfo.name
             } else {
-                this.name = ''
+                this.username = ''
             }
             let self = this;
             const listInfo = self.$axios.post('/api/listinfo', {
-                username: self.name
+                username: self.username
             }).then(function(response) {
                 const data = response.data.result;
                 self.todoBox = data;

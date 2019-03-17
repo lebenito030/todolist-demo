@@ -1,7 +1,7 @@
 const userModel = require('../config/db');
 
 const listInfo = function(username) {
-    let sql = `select * from lists where resides_user_name="${username}"`;
+    let sql = `select resides_box_name, list_content, list_status from lists where resides_user_name="${username}"`;
     return userModel.query(sql);
 };
 
@@ -20,9 +20,15 @@ const createCustomizeBox = function(username, box_name) {
     return userModel.query(sql);
 }
 
+const addList = function(list) {
+    let sql = `insert into lists (resides_box_name, list_content, list_status, resides_user_name) values ('${list.resides_box_name}', '${list.list_content}', '${list.list_status}', '${list.username}')`;
+    return userModel.query(sql);
+}
+
 module.exports = {
     listInfo,
     customizeBoxInfo,
     deleteCustomizeBox,
-    createCustomizeBox
+    createCustomizeBox,
+    addList
 }

@@ -1,21 +1,18 @@
-# todolist
+# Todolist-Demo
 
-> A Vue.js project
+一个拥有基本功能的任务清单
 
-## Build Setup
+1. 登录模块（使用 jwt 控制登录状态）
+2. 注册模块
+3. 创建清单标签
+4. 创建清单
+
+## 启动客户端
 
 ``` bash
-# install dependencies
+# 安装依赖
 npm install
 
-# serve with hot reload at localhost:8080
+# 启动热重载服务器加载客户端
 npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).

@@ -1,11 +1,12 @@
 const config = {
-    port: 4443, //server
+    //数据库信息
+    port: 4443,
     database: {
-        DATABASE: 'todolist',
-        USERNAME: 'root',
-        PASSWORD: 'Yo52$PYfL',
-        PORT: '3306',
-        HOST: 'localhost'
+        DATABASE: '',
+        USERNAME: '',
+        PASSWORD: '',
+        PORT: '',
+        HOST: ''
     }
 }
 

@@ -8,5 +8,6 @@ router.post('/boxinfo', listApi.getBoxInfo);
 router.post('/deleteBox', listApi.deleteCustomizeBox);
 router.post('/createBox', listApi.createCustomizeBox);
 router.post('/listinfo', listApi.getListInfo);
+router.post('/addlist', listApi.addList);
 
 module.exports = router;
