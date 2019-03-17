@@ -1,3 +1,3 @@
 # todolist-demo
 
-A simple todo app Powered by Vue.js and Koa
+基于 Vue.js + Koa + MySQL 的一个普通的任务清单应用
