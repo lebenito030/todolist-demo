@@ -9,5 +9,7 @@ router.post('/deleteBox', listApi.deleteCustomizeBox);
 router.post('/createBox', listApi.createCustomizeBox);
 router.post('/listinfo', listApi.getListInfo);
 router.post('/addlist', listApi.addList);
+router.post('/changestatus', listApi.changeStatus);
+router.post('/editbox', listApi.editBox);
 
 module.exports = router;

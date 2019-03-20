@@ -146,6 +146,18 @@
                 this.addToDoInput = '';
             },
             changeCompleteStatus: function(index) {
+                let self = this;
+                const changeStatus = self.$axios.post('/api/changestatus', {
+                    status: self.todoBox[index].list_status,
+                    id: self.todoBox[index].id
+                }).then(function(response) {
+                    if (!response.data.success) {
+                        self.$message({
+                            type: 'error',
+                            message: '与服务器连接失败'
+                        })
+                    }
+                })
                 if(this.todoBox[index].list_status === 1) {
                     this.todoBox[index].list_status = 0;
                 } else {
@@ -160,7 +172,7 @@
                 }
             }
         },
-        created() {
+        created: function() {
             const userInfo = this.getUserInfo();
             if (userInfo != null) {
                 this.username = userInfo.name
@@ -174,6 +186,17 @@
                 const data = response.data.result;
                 self.todoBox = data;
             });
+        },
+        watch: {
+            $route(val) {
+                let self = this;
+                const listInfo = self.$axios.post('/api/listinfo', {
+                    username: self.username
+                }).then(function(response) {
+                    const data = response.data.result;
+                    self.todoBox = data;
+                });
+            }
         },
     }
 </script>

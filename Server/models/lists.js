@@ -1,7 +1,7 @@
 const userModel = require('../config/db');
 
 const listInfo = function(username) {
-    let sql = `select resides_box_name, list_content, list_status from lists where resides_user_name="${username}"`;
+    let sql = `select id, resides_box_name, list_content, list_status from lists where resides_user_name="${username}"`;
     return userModel.query(sql);
 };
 
@@ -25,10 +25,22 @@ const addList = function(list) {
     return userModel.query(sql);
 }
 
+const changeStatus = function(list) {
+    let sql = `update lists set list_status='${list.status? 0 : 1}' WHERE id='${list.id}'`;
+    return userModel.query(sql);
+}
+
+const editBox = function(box_name) {
+    let sql = `update boxes inner join lists on boxes.resides_user_name = lists.resides_user_name set boxes.box_name = '${box_name}', lists.resides_box_name = '${box_name}' where boxes.box_name = lists.resides_box_name`
+    return userModel.query(sql);
+}
+
 module.exports = {
     listInfo,
     customizeBoxInfo,
     deleteCustomizeBox,
     createCustomizeBox,
-    addList
+    addList,
+    changeStatus,
+    editBox
 }

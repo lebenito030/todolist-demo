@@ -40,8 +40,9 @@
                         </template>
                         <el-menu-item style="padding: 0;" v-for="(item, index) in userCostomizeBox" :key="index" :index="'3-' + index">
                             <div style="text-align: center;" @mouseenter="showDeleteButton(index)" @mouseleave="hiddenDeleteButton(index)">
+                                <i class="el-icon-edit el-icon-edit-button" @mouseenter="buttonColorBlue" @mouseleave="buttonColorReset" @click="editBox(index)"></i>
                                 <span slot="title">{{ item.box_name }}</span>
-                                <i class="el-icon-delete el-icon-delete-button" @mouseenter="deleteButtonColorRed(index)" @mouseleave="deleteButtonColorReset(index)" @click="deleteBox(index)"></i>
+                                <i class="el-icon-delete el-icon-delete-button" @mouseenter="buttonColorRed" @mouseleave="buttonColorReset" @click="deleteBox(index)"></i>
                             </div>
                         </el-menu-item>
                     </el-submenu>
@@ -51,7 +52,7 @@
                     </el-menu-item>
                 </el-menu>
                 <el-main>
-                    <router-view :message="name"/>
+                    <router-view/>
                 </el-main>
             </el-container>
         </el-container>
@@ -98,6 +99,11 @@
         top: 34%; right: 10px;
         visibility: hidden;
     }
+    .el-icon-edit-button {
+        position: absolute;
+        top: 34%; left: 20px;
+        visibility: hidden;
+    }
 </style>
 
 <script>
@@ -120,21 +126,22 @@
             };
         },
         methods: {
-            deleteButtonColorRed: function(index) {
-                const lists = document.querySelectorAll('ul[role=menu] > li');
-                lists[index].querySelector('i').style.color = 'red';
+            buttonColorBlue: function(e) {
+                e.target.style.color = '#409EFF';
             },
-            deleteButtonColorReset: function(index) {
-                const lists = document.querySelectorAll('ul[role=menu] > li');
-                lists[index].querySelector('i').style.color = '';
+            buttonColorRed: function(e) {
+                e.target.style.color = 'red';
+            },
+            buttonColorReset: function(e) {
+                e.target.style.color = '';
             },
             showDeleteButton: function(index) {
                 const lists = document.querySelectorAll('ul[role=menu] > li');
-                lists[index].querySelector('i').style.visibility = 'visible';
+                lists[index].querySelectorAll('i').forEach(list => list.style.visibility = 'visible');
             },
             hiddenDeleteButton: function(index) {
                 const lists = document.querySelectorAll('ul[role=menu] > li');
-                lists[index].querySelector('i').style.visibility = 'hidden';
+                lists[index].querySelectorAll('i').forEach(list => list.style.visibility = 'hidden');
             },
             hamburgerMenu: function() {
                 if (this.isCollapse === true) {
@@ -173,32 +180,39 @@
                 }).then(( { value } ) => {
                     let self = this;
                     const user = self.getUserInfo();
-                    self.$axios.post('/api/createBox', {
-                        user: user.name,
-                        name: value
-                    }).then(function(response) {
-                        if (response.data.success) {
-                            const defaultBoxInfo = self.$axios.post('/api/boxinfo', {
-                                username: self.name
-                            }).then(function(response) {
-                                if (response.data.success) {
-                                    self.hasCostomBox = true;
-                                    self.userCostomizeBox = response.data.result;
-                                } else {
-                                    self.hasCostomBox = false;
-                                }
-                            });
-                            self.$message({
-                                type: 'info',
-                                message: '新标签栏创建成功'
-                            });
-                        } else {
-                            self.$message({
-                                type: 'error',
-                                message: '新标签栏创建失败'
-                            });
-                        }
-                    });
+                    if (this.userCostomizeBox.filter(name => name.box_name === value) == '') {
+                        self.$axios.post('/api/createBox', {
+                            user: user.name,
+                            name: value
+                        }).then(function(response) {
+                            if (response.data.success) {
+                                const defaultBoxInfo = self.$axios.post('/api/boxinfo', {
+                                    username: self.name
+                                }).then(function(response) {
+                                    if (response.data.success) {
+                                        self.hasCostomBox = true;
+                                        self.userCostomizeBox = response.data.result;
+                                    } else {
+                                        self.hasCostomBox = false;
+                                    }
+                                });
+                                self.$message({
+                                    type: 'info',
+                                    message: '新标签栏创建成功'
+                                });
+                            } else {
+                                self.$message({
+                                    type: 'error',
+                                    message: '新标签栏创建失败'
+                                });
+                            }
+                        });
+                    } else {
+                        self.$message({
+                            type: 'error',
+                            message: '标签内容重复'
+                        })
+                    }
                 });
             },
             deleteBox: function(deleteBoxId) {
@@ -239,6 +253,39 @@
                     });
                 });
             },
+            editBox: function(editBoxId) {
+                let editName = this.userCostomizeBox[editBoxId].name;
+                this.$prompt('标签名', '编辑标签名', {
+                    confirmButtonText: '应用',
+                    cancelButtonText: '取消',
+                    inputPlaceholder: editName,
+                    customClass: 'message-box-small'
+                }).then(( { value } ) => {
+                    let self = this;
+                    self.$axios.post('/api/editbox', {
+                        box_name: value
+                    }).then(function(response) {
+                        if (response.data.success) {
+                            self.$axios.post('/api/boxinfo', {
+                                username: self.name
+                            }).then(function(response) {
+                                if (response.data.success) {
+                                    self.hasCostomBox = true;
+                                    self.userCostomizeBox = response.data.result;
+                                } else {
+                                    self.hasCostomBox = false;
+                                }
+                                self.$router.push(`/user/${value}`);
+                            });
+                        } else {
+                            self.$message({
+                                type: 'error',
+                                message: '发生错误，请重试'
+                            });
+                        }
+                    });
+                });
+            },
             getUserInfo: function() {
                 const token = localStorage.getItem('token');
                 if (token != 'null' && token != null) {
@@ -269,6 +316,13 @@
                     self.hasCostomBox = false;
                 }
             });
+        },
+        beforeRouteEnter: function(to, from, next) {
+            if (to.params.id === 'Inbox' || to.params.id === 'Today') {
+                next();
+            } else {
+                next(from.path);
+            }
         }
     }
 </script>
