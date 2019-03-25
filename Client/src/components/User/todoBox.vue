@@ -22,7 +22,7 @@
             :key="index + 1">
             <el-col :span="22" class="item-box item-middle">
                 <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
-                <span class="item-message">{{ item.list_content }}</span>
+                <input class="item-message" type="text" :value="item.list_content" @change="editList(index, $event)">
                 <span class="item-date">{{ item.date }}</span>
             </el-col>
         </el-row>
@@ -37,7 +37,7 @@
             :key="index + 1">
             <el-col :span="22" class="item-box item-middle">
                 <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
-                <span class="item-message task-done">{{ item.list_content }}</span>
+                <input class="item-message task-done" type="text" :value="item.list_content" @change="editList(index, $event)">
                 <span class="item-date">{{ item.date }}</span>
             </el-col>
         </el-row>
@@ -57,9 +57,16 @@
         min-height: 40px;
         border-radius: 4px;
         border: 1px solid #dcdfe6;
+        transition-duration: 0.3s;
+    }
+    .item-box:hover {
+        box-shadow: 0 0 5px #dcdfe6;
     }
     .item-message {
         font-size: 14px;
+        text-align: center;
+        background: none;
+        border: 0;
     }
     .item-date {
         font-size: 12px;
@@ -170,6 +177,12 @@
                 } else {
                     this.isShowCompletedLists = 1;
                 }
+            },
+            editList: function(index, e) {
+                let oldVal = e.target._value;
+                let newVal = e.target.value;
+                if (oldVal === newVal) return;
+                this.todoBox[index].list_content = newVal;
             }
         },
         created: function() {
@@ -184,7 +197,11 @@
                 username: self.username
             }).then(function(response) {
                 const data = response.data.result;
-                self.todoBox = data;
+                if(data == undefined || "") {
+                    self.todoBox = [];
+                } else {
+                    self.todoBox = data;
+                }
             });
         },
         watch: {

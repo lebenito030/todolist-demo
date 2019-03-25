@@ -46,18 +46,22 @@ const createCustomizeBox = async function (ctx) {
             success: false
         }
     } else {
-        const result = await list.createCustomizeBox(data.user, data.name).then(function (result) {
-            return result;
+        await list.createCustomizeBox(data.user, data.name).then(function (result) {
+            if (result.affectedRows > 0) {
+                ctx.body = {
+                    success: true
+                };
+            } else {
+                ctx.body = {
+                    success: false
+                };
+            }
+        }).catch(function (result) {
+            ctx.body = {
+                success: false, //SQL 错误
+                info: result
+            }
         });
-        if (result.affectedRows > 0) {
-            ctx.body = {
-                success: true
-            };
-        } else {
-            ctx.body = {
-                success: false
-            };
-        }
     }
 };
 
@@ -112,19 +116,23 @@ const changeStatus = async function (ctx) {
 
 const editBox = async function (ctx) {
     const data = ctx.request.body;
-    const result = await list.editBox(data.box_name).then(function (result) {
-        return result;
+    await list.editBox(data.box_name).then(function (result) {
+        if (result.affectedRows > 0) {
+            ctx.body = {
+                success: true
+            };
+        } else {
+            ctx.body = {
+                success: false,
+                info: result
+            };
+        }
+    }).catch(function (result) {
+        ctx.body = {
+            success: false, //SQL 错误
+            info: result
+        }
     });
-    console.log(result);
-    if (result.affectedRows > 0) {
-        ctx.body = {
-            success: true
-        };
-    } else {
-        ctx.body = {
-            success: false
-        };
-    }
 }
 
 module.exports = {

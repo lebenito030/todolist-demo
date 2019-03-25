@@ -180,39 +180,32 @@
                 }).then(( { value } ) => {
                     let self = this;
                     const user = self.getUserInfo();
-                    if (this.userCostomizeBox.filter(name => name.box_name === value) == '') {
-                        self.$axios.post('/api/createBox', {
-                            user: user.name,
-                            name: value
-                        }).then(function(response) {
-                            if (response.data.success) {
-                                const defaultBoxInfo = self.$axios.post('/api/boxinfo', {
-                                    username: self.name
-                                }).then(function(response) {
-                                    if (response.data.success) {
-                                        self.hasCostomBox = true;
-                                        self.userCostomizeBox = response.data.result;
-                                    } else {
-                                        self.hasCostomBox = false;
-                                    }
-                                });
-                                self.$message({
-                                    type: 'info',
-                                    message: '新标签栏创建成功'
-                                });
-                            } else {
-                                self.$message({
-                                    type: 'error',
-                                    message: '新标签栏创建失败'
-                                });
-                            }
-                        });
-                    } else {
-                        self.$message({
-                            type: 'error',
-                            message: '标签内容重复'
-                        })
-                    }
+                    self.$axios.post('/api/createBox', {
+                        user: user.name,
+                        name: value
+                    }).then(function(response) {
+                        if (response.data.success) {
+                            const defaultBoxInfo = self.$axios.post('/api/boxinfo', {
+                                username: self.name
+                            }).then(function(response) {
+                                if (response.data.success) {
+                                    self.hasCostomBox = true;
+                                    self.userCostomizeBox = response.data.result;
+                                } else {
+                                    self.hasCostomBox = false;
+                                }
+                            });
+                            self.$message({
+                                type: 'info',
+                                message: '新标签栏创建成功'
+                            });
+                        } else {
+                            self.$message({
+                                type: 'error',
+                                message: `新标签栏创建失败，错误信息 ${response.data.info.code}`
+                            });
+                        }
+                    });
                 });
             },
             deleteBox: function(deleteBoxId) {
@@ -229,7 +222,7 @@
                         name: self.userCostomizeBox[deleteBoxId].box_name
                     }).then(function(response) {
                         if (response.data.success) {
-                            const defaultBoxInfo = self.$axios.post('/api/boxinfo', {
+                            self.$axios.post('/api/boxinfo', {
                                 username: self.name
                             }).then(function(response) {
                                 if (response.data.success) {
@@ -239,7 +232,7 @@
                                     self.hasCostomBox = false;
                                 }
                             });
-                            self.$router.push('/user');
+                            self.$router.push('/user/Inbox');
                             self.$message({
                                 type: 'success',
                                 message: '标签已删除'
@@ -280,7 +273,7 @@
                         } else {
                             self.$message({
                                 type: 'error',
-                                message: '发生错误，请重试'
+                                message: `发生错误，请重试`
                             });
                         }
                     });

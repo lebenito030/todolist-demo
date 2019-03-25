@@ -1,12 +1,12 @@
 const userModel = require('../config/db');
 
 const listInfo = function(username) {
-    let sql = `select id, resides_box_name, list_content, list_status from lists where resides_user_name="${username}"`;
+    let sql = `select id, resides_box_name, list_content, list_status from lists where resides_user_name="${username}" order by id desc`;
     return userModel.query(sql);
 };
 
 const customizeBoxInfo = function(username) {
-    let sql = `select box_name from boxes where resides_user_name="${username}"`;
+    let sql = `select box_name from boxes where resides_user_name="${username}" order by box_name`;
     return userModel.query(sql);
 };
 

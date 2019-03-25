@@ -42,7 +42,8 @@ let boxes =
         id INT NOT NULL AUTO_INCREMENT,
         resides_user_name CHAR(50) NOT NULL,
         box_name CHAR(50) NOT NULL,
-        PRIMARY KEY (id)
+        PRIMARY KEY (id),
+        CONSTRAINT uc_boxesInfo UNIQUE (resides_user_name, box_name)
     )`;
 
 let lists =
