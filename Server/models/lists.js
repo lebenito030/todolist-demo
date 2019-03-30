@@ -30,8 +30,18 @@ const changeStatus = function(list) {
     return userModel.query(sql);
 }
 
-const editBox = function(box_name) {
-    let sql = `update boxes inner join lists on boxes.resides_user_name = lists.resides_user_name set boxes.box_name = '${box_name}', lists.resides_box_name = '${box_name}' where boxes.box_name = lists.resides_box_name`
+const editBox = function(username, old_box_name, new_box_name) {
+    let sql = `update boxes left join lists on ((boxes.resides_user_name = lists.resides_user_name) and (boxes.box_name = lists.resides_box_name)) set boxes.box_name = '${new_box_name}', lists.resides_box_name = '${new_box_name}' where (boxes.box_name = '${old_box_name}' and boxes.resides_user_name = '${username}')`;
+    return userModel.query(sql);
+}
+
+const editList = function(list_id, new_content) {
+    let sql = `update lists set lists.list_content = '${new_content}' where lists.id = '${list_id}'`;
+    return userModel.query(sql);
+}
+
+const deleteList = function(list_id) {
+    let sql = `delete from lists where lists.id = '${list_id}'`;
     return userModel.query(sql);
 }
 
@@ -42,5 +52,7 @@ module.exports = {
     createCustomizeBox,
     addList,
     changeStatus,
-    editBox
+    editBox,
+    editList,
+    deleteList
 }

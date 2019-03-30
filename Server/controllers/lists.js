@@ -116,7 +116,7 @@ const changeStatus = async function (ctx) {
 
 const editBox = async function (ctx) {
     const data = ctx.request.body;
-    await list.editBox(data.box_name).then(function (result) {
+    await list.editBox(data.user, data.old_box_name, data.new_box_name).then(function (result) {
         if (result.affectedRows > 0) {
             ctx.body = {
                 success: true
@@ -135,6 +135,43 @@ const editBox = async function (ctx) {
     });
 }
 
+const editList = async function (ctx) {
+    const data = ctx.request.body;
+    await list.editList(data.list_id, data.new_content).then(function (result) {
+        if (result.affectedRows > 0) {
+            ctx.body = {
+                success: true
+            };
+        } else {
+            ctx.body = {
+                success: false,
+                info: result
+            };
+        }
+    }).catch(function (result) {
+        ctx.body = {
+            success: false, //SQL 错误
+            info: result
+        }
+    });
+}
+
+const deleteList = async function (ctx) {
+    const data = ctx.request.body;
+    const result = await list.deleteList(data.list_id).then(function (result) {
+        return result;
+    });
+    if (result.affectedRows > 0) {
+        ctx.body = {
+            success: true
+        };
+    } else {
+        ctx.body = {
+            success: false
+        };
+    }
+}
+
 module.exports = {
     getBoxInfo,
     deleteCustomizeBox,
@@ -142,5 +179,7 @@ module.exports = {
     getListInfo,
     addList,
     changeStatus,
-    editBox
+    editBox,
+    editList,
+    deleteList
 }

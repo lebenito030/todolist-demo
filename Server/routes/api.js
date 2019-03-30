@@ -11,5 +11,7 @@ router.post('/listinfo', listApi.getListInfo);
 router.post('/addlist', listApi.addList);
 router.post('/changestatus', listApi.changeStatus);
 router.post('/editbox', listApi.editBox);
+router.post('/editlist', listApi.editList);
+router.post('/deletelist', listApi.deleteList);
 
 module.exports = router;

@@ -11,10 +11,10 @@
                         </g>
                     </svg>
                 </div>
-                <span style="color: #FFFFFF;">{{ $route.params.id }}</span>
+                <span id="box-name">{{ $route.params.id }}</span>
                 <el-dropdown trigger="click" id="menu-more" class="el-icon-pointer">
                     <span class="el-dropdown-link">
-                        {{ name }}<i class="el-icon-arrow-down el-icon--right"></i>
+                        个人中心<i class="el-icon-arrow-down el-icon--right"></i>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item>
@@ -41,7 +41,7 @@
                         <el-menu-item style="padding: 0;" v-for="(item, index) in userCostomizeBox" :key="index" :index="'3-' + index">
                             <div style="text-align: center;" @mouseenter="showDeleteButton(index)" @mouseleave="hiddenDeleteButton(index)">
                                 <i class="el-icon-edit el-icon-edit-button" @mouseenter="buttonColorBlue" @mouseleave="buttonColorReset" @click="editBox(index)"></i>
-                                <span slot="title">{{ item.box_name }}</span>
+                                <div class="box-name"><span slot="title">{{ item.box_name }}</span></div>
                                 <i class="el-icon-delete el-icon-delete-button" @mouseenter="buttonColorRed" @mouseleave="buttonColorReset" @click="deleteBox(index)"></i>
                             </div>
                         </el-menu-item>
@@ -71,7 +71,7 @@
         justify-content: space-between;
     }
     #menu-button {
-        width: 64px;
+        min-width: 64px;
         line-height: 60px;
         border-right: 1px solid #e6e6e6;
     }
@@ -84,6 +84,19 @@
     #menu-more {
         margin-right: 20px;
         color: #FFFFFF;
+    }
+    #box-name {
+        color: #FFFFFF;
+        font-size: 18px;
+        max-width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .box-name {
+        margin: 0 auto;
+        max-width: 110px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     .el-icon-pointer {
         cursor: pointer;
@@ -216,9 +229,8 @@
                     customClass: 'message-box-small'
                 }).then(() => {
                     let self = this;
-                    const user = self.getUserInfo();
                     self.$axios.post('/api/deleteBox', {
-                        user: user.name,
+                        user: self.name,
                         name: self.userCostomizeBox[deleteBoxId].box_name
                     }).then(function(response) {
                         if (response.data.success) {
@@ -247,7 +259,7 @@
                 });
             },
             editBox: function(editBoxId) {
-                let editName = this.userCostomizeBox[editBoxId].name;
+                let editName = this.userCostomizeBox[editBoxId].box_name;
                 this.$prompt('标签名', '编辑标签名', {
                     confirmButtonText: '应用',
                     cancelButtonText: '取消',
@@ -256,7 +268,9 @@
                 }).then(( { value } ) => {
                     let self = this;
                     self.$axios.post('/api/editbox', {
-                        box_name: value
+                        user: self.name,
+                        old_box_name: editName,
+                        new_box_name: value
                     }).then(function(response) {
                         if (response.data.success) {
                             self.$axios.post('/api/boxinfo', {

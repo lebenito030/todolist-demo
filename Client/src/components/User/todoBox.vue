@@ -14,33 +14,106 @@
                 </button>
             </el-col>
         </el-row>
-        <el-row 
-            type="flex" 
-            justify="center" 
-            v-for="(item, index) in todoBox" 
-            v-if="item.list_status === 0 && item.resides_box_name === $route.params.id"
-            :key="index + 1">
-            <el-col :span="22" class="item-box item-middle">
-                <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
-                <input class="item-message" type="text" :value="item.list_content" @change="editList(index, $event)">
-                <span class="item-date">{{ item.date }}</span>
-            </el-col>
-        </el-row>
-        <el-row v-if="isShowCompletedLists">
-            <hr>
-        </el-row>
-        <el-row 
-            type="flex" 
-            justify="center" 
-            v-for="(item, index) in todoBox" 
-            v-if="(item.list_status === 1 && isShowCompletedLists) && item.resides_box_name === $route.params.id"
-            :key="index + 1">
-            <el-col :span="22" class="item-box item-middle">
-                <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
-                <input class="item-message task-done" type="text" :value="item.list_content" @change="editList(index, $event)">
-                <span class="item-date">{{ item.date }}</span>
-            </el-col>
-        </el-row>
+        <div v-if="$route.params.id !== 'Inbox'">
+            <el-row 
+                type="flex" 
+                justify="center" 
+                v-for="(item, index) in todoBox" 
+                v-if="item.list_status === 0 && item.resides_box_name === $route.params.id"
+                :key="index + 1">
+                <el-col :span="22" class="item-box item-middle">
+                    <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
+                    <input class="item-message" type="text" :value="item.list_content" @change="editList(index, $event)">
+                    <el-dropdown trigger="click">
+                        <span class="el-dropdown-link">
+                            <i class="el-icon-more"></i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>
+                                <span class="deleteList" @click="deleteList(index)"><i class="el-icon-delete"></i>删除</span>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-col>
+            </el-row>
+            <el-row v-if="isShowCompletedLists">
+                <hr>
+            </el-row>
+            <el-row 
+                type="flex" 
+                justify="center" 
+                v-for="(item, index) in todoBox" 
+                v-if="(item.list_status === 1 && isShowCompletedLists) && item.resides_box_name === $route.params.id"
+                :key="index + 1">
+                <el-col :span="22" class="item-box item-middle">
+                    <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
+                    <input class="item-message task-done" type="text" :value="item.list_content" @change="editList(index, $event)">
+                    <el-dropdown trigger="click">
+                        <span class="el-dropdown-link">
+                            <i class="el-icon-more"></i>
+                        </span>
+                        <el-dropdown-menu class="deleteMenu" slot="dropdown">
+                            <el-dropdown-item>
+                                <span class="deleteList" @click="deleteList(index)"><i class="el-icon-delete"></i>删除</span>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-col>
+            </el-row>
+        </div>
+        <div v-if="$route.params.id === 'Inbox'">
+            <el-row 
+                type="flex" 
+                justify="center" 
+                v-for="(item, index) in todoBox" 
+                v-if="item.list_status === 0"
+                :key="index + 1">
+                <el-col :span="22" class="item-box item-middle">
+                    <i class="el-icon-circle" @click="changeCompleteStatus(index)"></i>
+                    <div class="content-box">
+                        <input class="item-message" type="text" :value="item.list_content" @change="editList(index, $event)">
+                        <span class="resides-box-name">标签：{{ item.resides_box_name }}</span>
+                    </div>
+                    <el-dropdown trigger="click">
+                        <span class="el-dropdown-link">
+                            <i class="el-icon-more"></i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item>
+                                <span class="deleteList" @click="deleteList(index)"><i class="el-icon-delete"></i>删除</span>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-col>
+            </el-row>
+            <el-row v-if="isShowCompletedLists">
+                <hr>
+            </el-row>
+            <el-row 
+                type="flex" 
+                justify="center" 
+                v-for="(item, index) in todoBox" 
+                v-if="(item.list_status === 1 && isShowCompletedLists)"
+                :key="index + 1">
+                <el-col :span="22" class="item-box item-middle">
+                    <i class="el-icon-circle-check-outline" @click="changeCompleteStatus(index)"></i>
+                    <div class="content-box">
+                        <input class="item-message task-done" type="text" :value="item.list_content" @change="editList(index, $event)">
+                        <span class="resides-box-name">标签：{{ item.resides_box_name }}</span>
+                    </div>
+                    <el-dropdown trigger="click">
+                        <span class="el-dropdown-link">
+                            <i class="el-icon-more"></i>
+                        </span>
+                        <el-dropdown-menu class="deleteMenu" slot="dropdown">
+                            <el-dropdown-item>
+                                <span class="deleteList" @click="deleteList(index)"><i class="el-icon-delete"></i>删除</span>
+                            </el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-col>
+            </el-row>
+        </div>
     </div>
 </template>
 
@@ -63,10 +136,13 @@
         box-shadow: 0 0 5px #dcdfe6;
     }
     .item-message {
-        font-size: 14px;
-        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 16px;
+        text-align: left;
         background: none;
         border: 0;
+        outline: none;
     }
     .item-date {
         font-size: 12px;
@@ -96,6 +172,42 @@
         margin-left: 1px;
         border: 1px solid #000000;
         border-radius: 10px;
+    }
+    .el-icon-more {
+        transform: rotate(90deg);
+    }
+    .deleteList {
+        white-space: nowrap;
+    }
+    .deleteList > i {
+        margin-right: 5px;
+    }
+    .resides-box-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 6px;
+        text-align: left;
+    }
+    .content-box {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+    }
+    @media screen and (max-width: 430px) {
+        .item-message {
+            max-width: 150px;
+        }
+        .resides-box-name {
+            max-width: 150px;
+        }
+    }
+    @media screen and (min-width: 800px) {
+        .item-message {
+            min-width: 300px;
+        }
+        .resides-box-name {
+            min-width: 300px;
+        }
     }
 </style>
 
@@ -154,7 +266,7 @@
             },
             changeCompleteStatus: function(index) {
                 let self = this;
-                const changeStatus = self.$axios.post('/api/changestatus', {
+                self.$axios.post('/api/changestatus', {
                     status: self.todoBox[index].list_status,
                     id: self.todoBox[index].id
                 }).then(function(response) {
@@ -162,7 +274,7 @@
                         self.$message({
                             type: 'error',
                             message: '与服务器连接失败'
-                        })
+                        });
                     }
                 })
                 if(this.todoBox[index].list_status === 1) {
@@ -182,7 +294,46 @@
                 let oldVal = e.target._value;
                 let newVal = e.target.value;
                 if (oldVal === newVal) return;
-                this.todoBox[index].list_content = newVal;
+                this.todoBox[index].list_content = newVal;;
+                let self = this;
+                self.$axios.post('/api/editlist', {
+                    list_id: self.todoBox[index].id,
+                    new_content: newVal
+                }).then(function(response) {
+                    if (!response.data.success) {
+                        self.$message({
+                            type: 'error',
+                            message: '与服务器连接失败'
+                        });
+                    }
+                })
+            },
+            deleteList: function(index) {
+                this.$confirm('这会永久删除任务内容，你确定吗？', 'Warning', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning',
+                    customClass: 'message-box-small'
+                }).then(() => {
+                    let self = this;
+                    self.$axios.post('/api/deletelist', {
+                        list_id: self.todoBox[index].id
+                    }).then(function(response) {
+                        if (!response.data.success) {
+                            self.$message({
+                                type: 'error',
+                                message: '与服务器连接失败'
+                            });
+                        } else {
+                            self.$axios.post('/api/listinfo', {
+                                username: self.username
+                            }).then(function(response) {
+                                const data = response.data.result;
+                                self.todoBox = data;
+                            });
+                        }
+                    })
+                })
             }
         },
         created: function() {
